@@ -98,15 +98,6 @@ class Environment(object):
             "drop_food": (False, True) # this is masked from the player unless they have food on their spoon
         }
 
-
-        self.state = {
-            "player_locations": self.player_locations,
-            "player_mouths_open": self.player_mouths_open,
-            "food_locations": self.food_locations,
-            "spoon_lengths": self.spoon_lengths,
-            "spoon_thetas": self.spoon_thetas,
-        }
-
         self.player_rewards = [0 for _ in range(n_seats)]
         self.include_other_rew = include_other_rew
         if include_other_rew:
@@ -131,6 +122,16 @@ class Environment(object):
     
     def spoon_thetas(self):
         return [self.spoons[i].theta for i in range(self.n_seats)]
+    
+    def state(self):
+        state_dict = {
+            "player_locations": self.player_locations(),
+            "player_mouths_open": self.player_mouths_open(),
+            "food_locations": self.food_locations(),
+            "spoon_lengths": self.spoon_lengths(),
+            "spoon_thetas": self.spoon_thetas(),
+        }
+        return state_dict
     
     def rewards(self):
         rew_dict = {}
