@@ -1,6 +1,7 @@
 class Food(object):
-    def __init__(self, id):
+    def __init__(self, id, r, theta):
         self.id = id
+        self.location = (r, theta)
         pass
 
 class Spoon(object):
@@ -9,8 +10,9 @@ class Spoon(object):
         pass
 
 class Player(object):
-    def __init__(self, id):
+    def __init__(self, id, r, theta):
         self.id = id
+        self.location = (r, theta)
         pass
 
 class Table(object):
