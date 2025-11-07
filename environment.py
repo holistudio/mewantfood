@@ -51,7 +51,7 @@ class Table (object):
 
     def get_observation(self, agent):
         """
-        Get the observation space w.r.t. to a specific agent.
+        Get the observation space w.r.t. to a specific agent's perspective.
         """
         
         agent_id = int(agent.split('_')[-1])
@@ -83,7 +83,7 @@ class Table (object):
             # ONLY the OTHER agents' rewards are given as part of the observation
             if self.include_other_rew:
                 obs_dict["agent_rewards"].append(self.state["agent_rewards"][idx])
-                
+
             idx += 1
             if idx == agent_id:
                 looped = True
