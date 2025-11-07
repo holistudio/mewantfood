@@ -13,6 +13,7 @@ class Player(object):
     def __init__(self, id, r, theta):
         self.id = id
         self.location = (r, theta)
+        self.mouth_open = False
         pass
 
 class Table(object):
