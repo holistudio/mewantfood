@@ -83,11 +83,7 @@ class Environment(object):
             self.players[f"player_{i}"] = Player(id=i, r=r + player_offset, theta=theta, spoon_id=i)
             self.spoons[i] = Spoon(id=i, length=(min_spoon_len + max_spoon_len)/2, theta=0, agent_id=i)
             theta += theta_inc
-
-
-
-        
-
+            
         self.feed_dist = feed_dist
 
         self.action_space = {
@@ -99,7 +95,7 @@ class Environment(object):
         }
 
         self.include_other_rew = include_other_rew
-        
+
         self.terminal = False
         self.t = 0
         self.max_timesteps = max_timesteps
