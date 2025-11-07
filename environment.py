@@ -5,15 +5,17 @@ class Food(object):
         pass
 
 class Spoon(object):
-    def __init__(self, id):
+    def __init__(self, id, agent_id=-1):
         self.id = id
+        self.agent_id = agent_id
         pass
 
 class Player(object):
-    def __init__(self, id, r, theta):
+    def __init__(self, id, r, theta, spoon_id=-1):
         self.id = id
         self.location = (r, theta)
         self.mouth_open = False
+        self.spoon_id = spoon_id
         pass
 
 class Table(object):
