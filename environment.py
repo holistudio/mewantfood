@@ -2,6 +2,11 @@ class Food(object):
     def __init__(self, id, r, theta):
         self.id = id
         self.location = (r, theta)
+        self._initial_loc = (r, theta)
+        pass
+
+    def reset(self):
+        self.location = self._initial_loc
         pass
 
 class Spoon(object):
@@ -9,7 +14,7 @@ class Spoon(object):
         self.id = id
         self.length = length
         self.theta = theta
-        
+
         self.agent_id = agent_id
         
         self.has_food = False
