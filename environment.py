@@ -10,12 +10,12 @@ class Food(object):
         pass
 
 class Spoon(object):
-    def __init__(self, id, length, theta, agent_id=-1):
+    def __init__(self, id, length, theta, player_id=-1):
         self.id = id
         self.length = length
         self.theta = theta
 
-        self.agent_id = agent_id
+        self.player_id = player_id
         
         self.has_food = False
         self.food_id = -1
@@ -81,9 +81,9 @@ class Environment(object):
         for i in range(n_seats):
             self.foods[i] = Food(id=i, r=r - food_offset, theta=theta)
             self.players[f"player_{i}"] = Player(id=i, r=r + player_offset, theta=theta, spoon_id=i)
-            self.spoons[i] = Spoon(id=i, length=(min_spoon_len + max_spoon_len)/2, theta=0, agent_id=i)
+            self.spoons[i] = Spoon(id=i, length=(min_spoon_len + max_spoon_len)/2, theta=0, player_id=i)
             theta += theta_inc
-            
+
         self.feed_dist = feed_dist
 
         self.action_space = {
