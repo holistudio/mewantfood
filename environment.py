@@ -225,8 +225,8 @@ class Environment(object):
             for j in range(len(players_open_locs)):
                 px, py = players_open_locs
                 if distance((sx, sy),(px, py)) <= self.feed_dist:
-                    spoons_fed.append(i)
-                    players_fed.append(j)
+                    spoons_fed.append(spoons_w_food[i].id)
+                    players_fed.append(players_open[j].id)
         
         # return which players are fed and which spoons are fed and should be empty
         return players_fed, spoons_fed
