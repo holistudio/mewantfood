@@ -84,7 +84,6 @@ class Environment(object):
             self.spoons[i] = Spoon(id=i, length=(min_spoon_len + max_spoon_len)/2, theta=0, agent_id=i)
             theta += theta_inc
 
-        self.player_locations = []
         self.player_mouths_open = [False for _ in range(n_seats)]
         self.food_locations = []
         self.food_need_replenish = [False for _ in range(n_seats)]
@@ -106,7 +105,6 @@ class Environment(object):
 
         for n in self.n_seats:
             self.food_locations.append((r - food_offset, theta))
-            self.player_locations.append((r + player_offset, theta))
             key = f'player_{n}'
             self.rewards[key] = 0
             theta += theta_inc 
@@ -128,6 +126,9 @@ class Environment(object):
         self.t = 0
         self.max_timesteps = max_timesteps
         pass
+
+    def player_locations(self):
+        return [self.players[f"player_{i}"].location for i in range(self.n_seats)]
 
     def get_observation(self, player):
         """
