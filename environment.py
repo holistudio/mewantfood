@@ -87,8 +87,6 @@ class Environment(object):
 
 
         
-        self.spoon_lengths = [(min_spoon_len + max_spoon_len)/2 for _ in range(n_seats)]
-        self.spoon_thetas = [0 for _ in range(n_seats)]
 
         self.feed_dist = feed_dist
 
@@ -137,6 +135,9 @@ class Environment(object):
     
     def spoon_lengths(self):
         return [self.spoons[i].length for i in range(self.n_seats)]
+    
+    def spoon_thetas(self):
+        return [self.spoons[i].theta for i in range(self.n_seats)]
 
     def get_observation(self, player):
         """
