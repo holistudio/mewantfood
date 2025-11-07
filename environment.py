@@ -8,6 +8,8 @@ class Spoon(object):
     def __init__(self, id, agent_id=-1):
         self.id = id
         self.agent_id = agent_id
+        self.has_food = False
+        self.food_id = -1
         pass
 
 class Player(object):
