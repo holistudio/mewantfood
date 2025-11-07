@@ -1,13 +1,16 @@
 class Food(object):
-    def __init__(self):
+    def __init__(self, id):
+        self.id = id
         pass
 
 class Spoon(object):
-    def __init__(self):
+    def __init__(self, id):
+        self.id = id
         pass
 
 class Player(object):
-    def __init__(self):
+    def __init__(self, id):
+        self.id = id
         pass
 
 class Table(object):
