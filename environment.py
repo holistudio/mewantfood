@@ -86,8 +86,6 @@ class Environment(object):
 
 
 
-        self.food_locations = []
-        self.food_need_replenish = [False for _ in range(n_seats)]
         
         self.spoon_lengths = [(min_spoon_len + max_spoon_len)/2 for _ in range(n_seats)]
         self.spoon_thetas = [0 for _ in range(n_seats)]
@@ -133,6 +131,9 @@ class Environment(object):
     
     def player_mouths_open(self):
         return [self.players[f"player_{i}"].mouth_open for i in range(self.n_seats)]
+    
+    def food_locations(self):
+        return [self.foods[i].location for i in range(self.n_seats)]
 
     def get_observation(self, player):
         """
