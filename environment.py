@@ -231,7 +231,7 @@ class Environment(object):
         # return which players are fed and which spoons are fed and should be empty
         return players_fed, spoons_fed
     
-    def release_food(self, spoon_id, player_id):
+    def release_food(self, player_id, spoon_id):
         spoon = self.spoons[spoon_id]
         food = self.foods[spoon.food_id]
 
@@ -240,5 +240,27 @@ class Environment(object):
         
         player = self.players[player_id]
         player.hunger += 1
-
         pass
+
+    def check_pickup(self, spoon_id):
+        """
+        checks if spoon can pick up any food
+        """
+        spoon = self.spoons[spoon_id]
+        sr, stheta = spoon.length, spoon.theta
+        sx, sy = spoon.location(sr, stheta)
+
+        player = self.players[spoon.player_id]
+        pr, ptheta = player.location
+        px, py = polar_to_cartesian(pr, ptheta)
+
+        sx, sy = sx+px, sy+py
+
+        foods_picked = []
+        for food_id in self.foods.keys():
+            food = self.foods[food_id]
+            fr, ftheta = food.location
+            fx, fy = polar_to_cartesian(fr, ftheta)
+            if distance((sx,sy), (fx,fy)) <= self.feed_dist:
+                foods_picked.append(food_id)
+        return foods_picked
