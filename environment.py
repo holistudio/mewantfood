@@ -134,6 +134,9 @@ class Environment(object):
     
     def food_locations(self):
         return [self.foods[i].location for i in range(self.n_seats)]
+    
+    def spoon_lengths(self):
+        return [self.spoons[i].length for i in range(self.n_seats)]
 
     def get_observation(self, player):
         """
