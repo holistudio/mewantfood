@@ -32,11 +32,25 @@ class Spoon(object):
         pass
 
 class Player(object):
-    def __init__(self, id, r, theta, spoon_id=-1):
+    def __init__(self, id, r, theta, spoon_id=-1, full_time_limit=10):
         self.id = id
         self.location = (r, theta)
         self.mouth_open = False
         self.spoon_id = spoon_id
+        self.hungry = True
+        self.hunger = 0
+        self.full_timer = -1
+        self.full_time_limit = full_time_limit
+        pass
+
+    def step(self):
+        if self.hungry:
+            self.hunger -= 0.1
+        else:
+            if self.full_timer > self.full_time_limit:
+                self.full_timer -= 1
+            else:
+                self.hungry = True
         pass
 
 class Table(object):
