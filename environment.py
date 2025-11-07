@@ -133,12 +133,7 @@ class Environment(object):
         }
         return state_dict
     
-    def rewards(self):
-        rew_dict = {}
-        for i in range(self.n_seats):
-            key = f"player_{i}"
-            rew_dict[key] = self.players[key].hunger
-        return rew_dict
+    
 
     def get_observation(self, player):
         """
@@ -182,6 +177,13 @@ class Environment(object):
                 idx = 0
 
         return obs_dict
+    
+    def rewards(self):
+        rew_dict = {}
+        for i in range(self.n_seats):
+            key = f"player_{i}"
+            rew_dict[key] = self.players[key].hunger
+        return rew_dict
     
     def check_terminal(self):
         if self.t > self.max_timesteps:
