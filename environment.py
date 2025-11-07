@@ -44,6 +44,50 @@ class Table (object):
             "spoon_thetas": [0 for _ in range(n_seats)],
         }
 
+        self.include_other_rew = include_other_rew
         if include_other_rew:
             self.state["agent_rewards"] = [0 for _ in range(n_seats)]
         pass
+
+    def get_observation(self, agent):
+        """
+        Get the observation space w.r.t. to a specific agent.
+        """
+        
+        agent_id = int(agent.split('_')[-1])
+        looped = False
+
+        # most observations list the agent's state first before the other agents' states
+        obs_dict = {
+            "agent_locations": [self.state['agent_locations'][agent_id]],
+            "agent_mouths_open": [self.state['agent_mouths_open'][agent_id]],
+            "food_locations": [self.state['food_locations'][agent_id]],
+            "spoon_lengths": [self.state['spoon_lengths'][agent_id]],
+            "spoon_thetas": [self.state['spoon_thetas'][agent_id]]
+        }
+
+        # for when rewards are provided in the observation
+        # ONLY the OTHER agents' rewards are given as part of the observation
+        if self.include_other_rew:
+            obs_dict["agent_rewards"] = []
+
+        idx = agent_id + 1
+        while not looped:
+            obs_dict['agent_locations'].append(self.state['agent_locations'][idx])
+            obs_dict['agent_mouths_open'].append(self.state['agent_mouths_open'][idx])
+            obs_dict['food_locations'].append(self.state['food_locations'][idx])
+            obs_dict['spoon_lengths'].append(self.state['spoon_lengths'][idx])
+            obs_dict['spoon_thetas'].append(self.state['spoon_thetas'][idx])
+
+            # for when rewards are provided in the observation
+            # ONLY the OTHER agents' rewards are given as part of the observation
+            if self.include_other_rew:
+                obs_dict["agent_rewards"].append(self.state["agent_rewards"][idx])
+                
+            idx += 1
+            if idx == agent_id:
+                looped = True
+            if idx >= self.n_seats:
+                idx = 0
+
+        return obs_dict
