@@ -1,3 +1,15 @@
+import math
+
+def polar_to_cartesian(r, theta):
+    # assume theta is in degrees
+    theta = theta * math.pi / 180
+    return r*math.cos(theta), r*math.sin(theta)
+
+def distance(p1, p2):
+    p1x, p1y = p1
+    p2x, p2y = p2
+    return math.sqrt((p1x - p2x)**2 + (p1y - p2y)**2)
+
 class Food(object):
     def __init__(self, id, r, theta):
         self.id = id
@@ -183,8 +195,38 @@ class Environment(object):
     
     def check_fed(self):
         # get all spoon head locations that have food
+        spoons_w_food = [self.spoons[i] for i in range(self.n_seats) if self.spoons[i].has_food]
+        players_w_food = [self.players[f"player_{s.player_id}"] for s in spoons_w_food]
+        
+        spoon_heads_w_food = []
+        for i,s in enumerate(spoons_w_food):
+            pr, ptheta = players_w_food[i].location
+            sr, stheta = s.length, s.theta
+            px, py = polar_to_cartesian(pr, ptheta)
+
+            sx, sy = polar_to_cartesian(sr, stheta)
+            sx, sy = sx+px, sy+py
+            spoon_heads_w_food.append((sx,sy))
+        
         # get locations of all players with open mouth
+        players_open = [self.players[f"player_{i}"] for i in range(self.n_seats) if self.players[f"player_{i}"].mouth_open]
+        players_open_locs = []
+        for p in players_open:
+            pr, ptheta = p.location
+            px, py = polar_to_cartesian(pr, ptheta)
+            players_open_locs.append((px, py))
+
+        players_fed = []
+        spoons_fed = []
         # compare distance between all spoon heads with food and open mouth players
         # are within the feed distance
-        # return which players are fed and which s
-        pass
+        for i in range(len(spoon_heads_w_food)):
+            sx, sy = spoon_heads_w_food[i]
+            for j in range(len(players_open_locs)):
+                px, py = players_open_locs
+                if distance((sx, sy),(px, py)) <= self.feed_dist:
+                    spoons_fed.append(i)
+                    players_fed.append(j)
+        
+        # return which players are fed and which spoons are fed and should be empty
+        return players_fed, spoons_fed
