@@ -5,9 +5,13 @@ class Food(object):
         pass
 
 class Spoon(object):
-    def __init__(self, id, agent_id=-1):
+    def __init__(self, id, length, theta, agent_id=-1):
         self.id = id
+        self.length = length
+        self.theta = theta
+        
         self.agent_id = agent_id
+        
         self.has_food = False
         self.food_id = -1
         pass
