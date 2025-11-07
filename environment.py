@@ -1,5 +1,5 @@
 class Table (object):
-    def __init__(self, r, n_seats, max_spoon_angle=45, include_other_rew=False, max_timesteps=5000):
+    def __init__(self, r, n_seats, max_spoon_angle=45, feed_dist= 0.1, include_other_rew=False, max_timesteps=5000):
         self.radius = r
         self.n_seats = n_seats
 
@@ -22,6 +22,8 @@ class Table (object):
 
         self.spoon_lengths = [(min_spoon_len + max_spoon_len)/2 for _ in range(n_seats)]
         self.spoon_thetas = [0 for _ in range(n_seats)]
+
+        self.feed_dist = feed_dist
 
         self.action_space = {
             "spoon_length": (min_spoon_len, max_spoon_len),
@@ -105,3 +107,11 @@ class Table (object):
         if self.t > self.max_timesteps:
             return True
         return False
+    
+    def check_fed(self):
+        # get all spoon head locations that have food
+        # get locations of all agents with open mouth
+        # compare distance between all spoon heads with food and open mouth agents
+        # are within the feed distance
+        # return which agents are fed and which s
+        pass
