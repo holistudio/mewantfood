@@ -7,6 +7,7 @@ class Table (object):
         food_offset = 1
 
         self.agent_locations = []
+        self.agent_mouths_open = [False for _ in range(n_seats)]
         self.food_locations = []
         self.food_need_replenish = [False for _ in range(n_seats)]
         
@@ -18,6 +19,9 @@ class Table (object):
 
         self.max_spoon_angle = max_spoon_angle
         self.min_spoon_angle = -max_spoon_angle
+
+        self.spoon_lengths = [(min_spoon_len + max_spoon_len)/2 for _ in range(n_seats)]
+        self.spoon_thetas = [0 for _ in range(n_seats)]
 
         self.action_space = {
             "spoon_length": (min_spoon_len, max_spoon_len),
@@ -38,15 +42,16 @@ class Table (object):
 
         self.state = {
             "agent_locations": self.agent_locations,
-            "agent_mouths_open": [False for _ in range(n_seats)],
+            "agent_mouths_open": self.agent_mouths_open,
             "food_locations": self.food_locations,
-            "spoon_lengths": [(min_spoon_len + max_spoon_len)/2 for _ in range(n_seats)],
-            "spoon_thetas": [0 for _ in range(n_seats)],
+            "spoon_lengths": self.spoon_lengths,
+            "spoon_thetas": self.spoon_thetas,
         }
 
+        self.agent_rewards = [0 for _ in range(n_seats)]
         self.include_other_rew = include_other_rew
         if include_other_rew:
-            self.state["agent_rewards"] = [0 for _ in range(n_seats)]
+            self.state["agent_rewards"] = self.agent_rewards
 
         self.terminal = False
         self.t = 0
