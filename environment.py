@@ -230,3 +230,15 @@ class Environment(object):
         
         # return which players are fed and which spoons are fed and should be empty
         return players_fed, spoons_fed
+    
+    def release_food(self, spoon_id, player_id):
+        spoon = self.spoons[spoon_id]
+        food = self.foods[spoon.food_id]
+
+        spoon.drop()
+        food.reset()
+        
+        player = self.players[player_id]
+        player.hunger += 1
+
+        pass
