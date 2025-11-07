@@ -12,6 +12,16 @@ class Spoon(object):
         self.food_id = -1
         pass
 
+    def pick_up(self, food_id):
+        self.has_food = True
+        self.food_id = food_id
+        pass
+
+    def drop(self):
+        self.has_food = False
+        self.food_id = -1
+        pass
+
 class Player(object):
     def __init__(self, id, r, theta, spoon_id=-1):
         self.id = id
