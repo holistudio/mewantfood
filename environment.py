@@ -1,5 +1,5 @@
 class Table (object):
-    def __init__(self, r, n_seats, max_spoon_angle=45, include_other_rew=False):
+    def __init__(self, r, n_seats, max_spoon_angle=45, include_other_rew=False, max_timesteps=5000):
         self.radius = r
         self.n_seats = n_seats
 
@@ -47,6 +47,10 @@ class Table (object):
         self.include_other_rew = include_other_rew
         if include_other_rew:
             self.state["agent_rewards"] = [0 for _ in range(n_seats)]
+
+        self.terminal = False
+        self.t = 0
+        self.max_timesteps = max_timesteps
         pass
 
     def get_observation(self, agent):
@@ -91,3 +95,8 @@ class Table (object):
                 idx = 0
 
         return obs_dict
+    
+    def check_terminal(self):
+        if self.t > self.max_timesteps:
+            return True
+        return False
