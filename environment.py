@@ -44,6 +44,10 @@ class Player(object):
         pass
 
     def step(self):
+        """
+        Player hunger changes at each step depending on 
+        if it is hungry and how long it has been full
+        """
         if self.hungry:
             self.hunger -= 0.1
         else:
