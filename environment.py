@@ -57,7 +57,7 @@ class Player(object):
                 self.hungry = True
         pass
 
-class Table(object):
+class Environment(object):
     def __init__(self, r, n_seats, max_spoon_angle=45, feed_dist= 0.1, include_other_rew=False, max_timesteps=5000):
         self.radius = r
         self.n_seats = n_seats
