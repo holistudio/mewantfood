@@ -98,13 +98,6 @@ class Environment(object):
             "drop_food": (False, True) # this is masked from the player unless they have food on their spoon
         }
 
-        self.rewards = {}
-
-        for n in self.n_seats:
-            self.food_locations.append((r - food_offset, theta))
-            key = f'player_{n}'
-            self.rewards[key] = 0
-            theta += theta_inc 
 
         self.state = {
             "player_locations": self.player_locations,
@@ -138,6 +131,13 @@ class Environment(object):
     
     def spoon_thetas(self):
         return [self.spoons[i].theta for i in range(self.n_seats)]
+    
+    def rewards(self):
+        rew_dict = {}
+        for i in range(self.n_seats):
+            key = f"player_{i}"
+            rew_dict[key] = self.players[key].hunger
+        return rew_dict
 
     def get_observation(self, player):
         """
