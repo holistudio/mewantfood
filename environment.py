@@ -133,23 +133,20 @@ class Environment(object):
         }
         return state_dict
     
-    
-
-    def get_observation(self, player):
+    def observation(self, player):
         """
         Get the observation space w.r.t. to a specific player's perspective.
         """
         
         player_id = int(player.split('_')[-1])
-        looped = False
-
+        
         # most observations list the player's state first before the other players' states
         obs_dict = {
-            "player_locations": [self.state['player_locations'][player_id]],
-            "player_mouths_open": [self.state['player_mouths_open'][player_id]],
-            "food_locations": [self.state['food_locations'][player_id]],
-            "spoon_lengths": [self.state['spoon_lengths'][player_id]],
-            "spoon_thetas": [self.state['spoon_thetas'][player_id]]
+            "player_locations": [self.state()['player_locations'][player_id]],
+            "player_mouths_open": [self.state()['player_mouths_open'][player_id]],
+            "food_locations": [self.state()['food_locations'][player_id]],
+            "spoon_lengths": [self.state()['spoon_lengths'][player_id]],
+            "spoon_thetas": [self.state()['spoon_thetas'][player_id]]
         }
 
         # for when rewards are provided in the observation
@@ -158,6 +155,7 @@ class Environment(object):
             obs_dict["player_rewards"] = []
 
         idx = player_id + 1
+        looped = False
         while not looped:
             obs_dict['player_locations'].append(self.state['player_locations'][idx])
             obs_dict['player_mouths_open'].append(self.state['player_mouths_open'][idx])
