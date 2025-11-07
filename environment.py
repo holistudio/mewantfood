@@ -65,20 +65,30 @@ class Environment(object):
         player_offset = 1
         food_offset = 1
 
-        self.player_locations = []
-        self.player_mouths_open = [False for _ in range(n_seats)]
-        self.food_locations = []
-        self.food_need_replenish = [False for _ in range(n_seats)]
-        
+        self.players = {}
+        self.spoons = {}
+        self.foods = {}
+
         theta = 0
         theta_inc = 360/n_seats
-        
+
         min_spoon_len = player_offset + r * 2 - food_offset
         max_spoon_len = min_spoon_len + food_offset + player_offset
 
         self.max_spoon_angle = max_spoon_angle
         self.min_spoon_angle = -max_spoon_angle
 
+        for i in range(n_seats):
+            self.foods[i] = Food(id=i, r=r - food_offset, theta=theta)
+            self.players[f"player_{i}"] = Player(id=i, r=r + player_offset, theta=theta, spoon_id=i)
+            self.spoons[i] = Spoon(id=i, length=(min_spoon_len + max_spoon_len)/2, theta=0, agent_id=i)
+            theta += theta_inc
+
+        self.player_locations = []
+        self.player_mouths_open = [False for _ in range(n_seats)]
+        self.food_locations = []
+        self.food_need_replenish = [False for _ in range(n_seats)]
+        
         self.spoon_lengths = [(min_spoon_len + max_spoon_len)/2 for _ in range(n_seats)]
         self.spoon_thetas = [0 for _ in range(n_seats)]
 
@@ -95,7 +105,7 @@ class Environment(object):
         self.rewards = {}
 
         for n in self.n_seats:
-            self.food_locations.append((r - food_offset), theta)
+            self.food_locations.append((r - food_offset, theta))
             self.player_locations.append((r + player_offset, theta))
             key = f'player_{n}'
             self.rewards[key] = 0
