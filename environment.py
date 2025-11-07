@@ -98,11 +98,8 @@ class Environment(object):
             "drop_food": (False, True) # this is masked from the player unless they have food on their spoon
         }
 
-        self.player_rewards = [0 for _ in range(n_seats)]
         self.include_other_rew = include_other_rew
-        if include_other_rew:
-            self.state["player_rewards"] = self.player_rewards
-
+        
         self.terminal = False
         self.t = 0
         self.max_timesteps = max_timesteps
