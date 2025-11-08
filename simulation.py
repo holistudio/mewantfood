@@ -14,3 +14,5 @@ for agent in env.agent_iter():
         action = env.action_sample()
 
     env.step(action)
+
+print(env.rewards())
