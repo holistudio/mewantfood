@@ -12,6 +12,7 @@ Virtual/conda environment:
 
 ```
 conda create -n mewantfood python=3.12
+conda activate mewantfood
 ```
 
 Install requirements:
