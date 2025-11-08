@@ -1,6 +1,12 @@
 import pygame
 import sys
 import math
+import json
+
+playback_json = 'playback.json'
+
+with open(playback_json, 'r') as f:
+    trajectory = json.load(f)['trajectory']
 
 # Initialize Pygame
 pygame.init()
@@ -13,7 +19,7 @@ TABLE_RADIUS = 180
 
 AGENT_SIZE = FOOD_SIZE = 10
 
-agent_locations = [(200,0), (200,90), (200,180), (200,270)]
+agent_locations = [(p[0],p[1]) for p in trajectory[0]['player_locations']]
 mouth_locations = [(a[0]-5,a[1]) for a in agent_locations]
 
 
@@ -57,7 +63,7 @@ clock = pygame.time.Clock()
 fps = 30
 
 # Total frames for 10 seconds
-total_frames = 10 * fps
+total_frames = len(trajectory) * fps
 
 frame_counter = 0
 running = True
@@ -66,9 +72,11 @@ while running and frame_counter < total_frames:
         if event.type == pygame.QUIT:
             running = False
 
-    spoon_lengths = [200, 110, 209, 501]
-    spoon_angles = [0, 10, -10, -45]
-    food_locations  = [(160,0), (160,90), (160,180), (160,270)]
+    idx = frame_counter // fps
+    spoon_lengths = trajectory[idx]['spoon_lengths']
+    spoon_thetas = trajectory[idx]['spoon_thetas']
+    food_locations  = trajectory[idx]['food_locations']
+    agent_mouths = trajectory[idx]['player_mouths_open']
 
     screen.fill(WHITE)
 
@@ -90,7 +98,7 @@ while running and frame_counter < total_frames:
         start_y = int(screen_height / 2 + agent_y_cart)
 
         # Calculate the spoon's absolute angle
-        spoon_angle = theta + 180 + spoon_angles[i]
+        spoon_angle = theta + 180 + spoon_thetas[i]
         end_x_cart, end_y_cart = polar_to_cartesian(spoon_lengths[i], spoon_angle)
         end_x = start_x + int(end_x_cart)
         end_y = start_y + int(end_y_cart)
@@ -108,11 +116,12 @@ while running and frame_counter < total_frames:
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
         pygame.draw.circle(screen, BLACK, (screen_x, screen_y), AGENT_SIZE)
-    for r, theta in mouth_locations:
-        x, y = polar_to_cartesian(r, theta)
-        screen_x = int(screen_width / 2 + x)
-        screen_y = int(screen_height / 2 + y)
-        pygame.draw.circle(screen, WHITE, (screen_x, screen_y), 4)
+    for i, (r, theta) in enumerate(mouth_locations):
+        if agent_mouths[i]:
+            x, y = polar_to_cartesian(r, theta)
+            screen_x = int(screen_width / 2 + x)
+            screen_y = int(screen_height / 2 + y)
+            pygame.draw.circle(screen, WHITE, (screen_x, screen_y), 4)
 
     
 
