@@ -9,6 +9,10 @@ def polar_to_cartesian(r, theta):
     theta = theta * math.pi / 180
     return r*math.cos(theta), r*math.sin(theta)
 
+def cartesian_to_polar(x, y):
+    # TODO: w.r.t screen origin
+    pass
+
 def distance(p1, p2):
     p1x, p1y = p1
     p2x, p2y = p2
@@ -95,7 +99,7 @@ class Environment(object):
         self.min_spoon_angle = -max_spoon_angle
 
         for i in range(n_seats):
-            self.foods[i] = Food(id=i, r=r - food_offset, theta=theta)
+            self.foods[i] = Food(id=i, r=r + food_offset, theta=theta)
             self.players[f"player_{i}"] = Player(id=i, r=r + player_offset, theta=theta, spoon_id=i)
             self.spoons[i] = Spoon(id=i, length=(min_spoon_len + max_spoon_len)/2, theta=0, player_id=i)
             theta += theta_inc
@@ -286,7 +290,7 @@ class Environment(object):
         spoon.pick_up(food_id)
 
         food = self.foods[food_id]
-        food.location = (-1, -1)
+        food.location = (-1, -1) # TODO: this should reflect wherever the spoon head is
 
     def agent_iter(self):
         while not self.check_terminal():
@@ -310,6 +314,8 @@ class Environment(object):
 
         # set spoon length and theta
         current_spoon.length, current_spoon.theta = spoon_length, spoon_theta
+
+        # TODO: update food location if the spoon head has food
 
         # set current player mouth to open or closed
         current_player.mouth_open = open_mouth
