@@ -309,10 +309,11 @@ class Environment(object):
         pass
 
     def last(self):
+        obs_dict = self.observation(f"player_{int(self.player_ptr)}")
         termination = self.check_terminal()
         truncation = termination
         reward = self.rewards()[f"player_{int(self.player_ptr)}"]
-        return observation, reward, termination, truncation
+        return obs_dict, reward, termination, truncation
     
     def action_sample(self):
         sl_min, sl_max = self.action_space["spoon_length"]
