@@ -280,3 +280,31 @@ class Environment(object):
             self.player_ptr = 0
         else:
             self.player_ptr += 1
+    
+    def step(self, action):
+        current_player = self.players[f"player_{int(self.player_ptr)}"]
+        current_spoon = self.spoons[int(self.player_ptr)]
+
+        spoon_length, spoon_theta, open_mouth, pick_food, drop_food = action
+
+        # set spoon length and theta
+        current_spoon.length, current_spoon.theta = spoon_length, spoon_theta
+
+        # set current player mouth to open or closed
+        current_player.mouth_open = open_mouth
+
+        if pick_food:
+            # if pick_food is True
+            # check if it's possible to pick up food
+            if self.check_pickup(current_spoon.id):
+                # if so, pickup food
+                self.pickup_food(current_spoon.id)
+
+        if current_spoon.has_food:
+            # if current spoon has food
+            # check drop_food
+            if drop_food:
+                # if so, release food
+                self.release_food()
+        pass
+
