@@ -315,6 +315,14 @@ class Environment(object):
         reward = self.rewards()[f"player_{int(self.player_ptr)}"]
         return obs_dict, reward, termination, truncation
     
+    def reset(self):
+        self.__init__(r=self.radius, 
+                      n_seats=self.n_seats, 
+                      max_spoon_angle=self.max_spoon_angle, 
+                      feed_dist= self.feed_dist, 
+                      include_other_rew=self.include_other_rew, 
+                      max_timesteps=self.max_timesteps)
+
     def action_sample(self):
         sl_min, sl_max = self.action_space["spoon_length"]
         st_min, st_max = self.action_space["spoon_theta"]
