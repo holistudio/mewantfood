@@ -56,6 +56,16 @@ def draw_rotated_ellipse(surface, color, rect_center, r1, r2, angle, width=0):
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
+BLUE = (0, 0, 255)
+
+BG_COLOR = WHITE
+STROKE_COLOR = BLACK
+AGENT_COLOR = BLACK
+FOOD_COLOR = RED
+
+THIN_STROKE = 1
+THICK_STROKE = 2
 
 # Create the screen
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -81,17 +91,17 @@ while running and frame_counter < total_frames:
     food_locations  = trajectory[idx]['food_locations']
     agent_mouths = trajectory[idx]['player_mouths_open']
 
-    screen.fill(WHITE)
+    screen.fill(BG_COLOR)
 
     # Draw the table
-    pygame.draw.circle(screen, BLACK, (screen_width // 2, screen_height // 2), TABLE_RADIUS, 1)
+    pygame.draw.circle(screen, STROKE_COLOR, (screen_width // 2, screen_height // 2), TABLE_RADIUS, THIN_STROKE)
 
     # Draw food
     for r, theta in food_locations:
         x, y = polar_to_cartesian(r, theta)
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
-        pygame.draw.rect(screen, RED, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
+        pygame.draw.rect(screen, FOOD_COLOR, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
 
     # Draw spoons
     for i, (r, theta) in enumerate(agent_locations):
@@ -105,26 +115,26 @@ while running and frame_counter < total_frames:
         end_x_cart, end_y_cart = polar_to_cartesian(spoon_lengths[i], spoon_angle)
         end_x = start_x + int(end_x_cart)
         end_y = start_y + int(end_y_cart)
-        pygame.draw.line(screen, BLACK, (start_x, start_y), (end_x, end_y), 2)
+        pygame.draw.line(screen, STROKE_COLOR, (start_x, start_y), (end_x, end_y), THICK_STROKE)
         
         # Draw spoon head (ellipse)
         # Draw filled white ellipse
-        draw_rotated_ellipse(screen, WHITE, (end_x, end_y), 10, 5, spoon_angle)
+        draw_rotated_ellipse(screen, BG_COLOR, (end_x, end_y), 10, 5, spoon_angle)
         # Draw black outline
-        draw_rotated_ellipse(screen, BLACK, (end_x, end_y), 10, 5, spoon_angle, 2)
+        draw_rotated_ellipse(screen, STROKE_COLOR, (end_x, end_y), 10, 5, spoon_angle, THICK_STROKE)
 
     # Draw agents
     for r, theta in agent_locations:
         x, y = polar_to_cartesian(r, theta)
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
-        pygame.draw.circle(screen, BLACK, (screen_x, screen_y), AGENT_SIZE)
+        pygame.draw.circle(screen, AGENT_COLOR, (screen_x, screen_y), AGENT_SIZE)
     for i, (r, theta) in enumerate(mouth_locations):
         if agent_mouths[i]:
             x, y = polar_to_cartesian(r, theta)
             screen_x = int(screen_width / 2 + x)
             screen_y = int(screen_height / 2 + y)
-            pygame.draw.circle(screen, WHITE, (screen_x, screen_y), 4)
+            pygame.draw.circle(screen, BG_COLOR, (screen_x, screen_y), 4)
 
     
 
