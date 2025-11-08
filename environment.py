@@ -247,7 +247,7 @@ class Environment(object):
         sr, stheta = spoon.length, spoon.theta
         sx, sy = polar_to_cartesian(sr, stheta)
 
-        player = self.players[spoon.player_id]
+        player = self.players[f"player_{int(spoon.player_id)}"]
         pr, ptheta = player.location
         px, py = polar_to_cartesian(pr, ptheta)
 
