@@ -1,5 +1,8 @@
 import math
 import random
+import copy
+import json
+
 def polar_to_cartesian(r, theta):
     # assume theta is in degrees
     theta = theta * math.pi / 180
@@ -113,6 +116,11 @@ class Environment(object):
         self.max_timesteps = max_timesteps
 
         self.player_ptr = 0
+
+        self.log ={
+            "trajectory":[]
+        }
+        self.log_history()
         pass
 
     def player_locations(self):
@@ -140,6 +148,14 @@ class Environment(object):
         }
         return state_dict
     
+    def log_history(self):
+        self.log['trajectory'].append(copy.deepcopy(self.state()))
+        pass
+
+    def save_log(self, filename="playback.json"):
+        with open(filename, 'w') as f:
+            json.dump(self.log,f)
+
     def observation(self, player):
         """
         Get the observation space w.r.t. to a specific player's perspective.
@@ -310,6 +326,8 @@ class Environment(object):
             if drop_food:
                 # if so, release food
                 self.release_food()
+        
+        self.log_history()
         pass
 
     def last(self):
@@ -320,6 +338,7 @@ class Environment(object):
         return obs_dict, reward, termination, truncation
     
     def reset(self):
+        self.save_log()
         self.__init__(r=self.radius, 
                       n_seats=self.n_seats, 
                       max_spoon_angle=self.max_spoon_angle, 
