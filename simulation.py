@@ -1,6 +1,6 @@
 from environment import Environment
 
-env = Environment(r=5, n_seats=4)
+env = Environment(r=180, n_seats=4)
 
 env.reset()
 
