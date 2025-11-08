@@ -31,6 +31,16 @@ def polar_to_cartesian(r, theta):
     y = r * math.sin(theta_rad)
     return x, y
 
+def draw_rotated_ellipse(surface, color, rect_center, r1, r2, angle, width=0):
+    """Draws a rotated ellipse on a surface."""
+    target_rect = pygame.Rect(rect_center, (0, 0)).inflate((r1 * 2, r2 * 2))
+    ellipse_surface = pygame.Surface(target_rect.size, pygame.SRCALPHA)
+    pygame.draw.ellipse(ellipse_surface, color, (0, 0, r1 * 2, r2 * 2), width)
+    
+    rotated_surface = pygame.transform.rotate(ellipse_surface, -angle)
+    
+    surface.blit(rotated_surface, rotated_surface.get_rect(center=rect_center))
+
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -82,6 +92,12 @@ while running and frame_counter < total_frames:
         end_x = start_x + int(end_x_cart)
         end_y = start_y + int(end_y_cart)
         pygame.draw.line(screen, BLACK, (start_x, start_y), (end_x, end_y), 2)
+        
+        # Draw spoon head (ellipse)
+        # Draw filled white ellipse
+        draw_rotated_ellipse(screen, WHITE, (end_x, end_y), 10, 5, spoon_angle)
+        # Draw black outline
+        draw_rotated_ellipse(screen, BLACK, (end_x, end_y), 10, 5, spoon_angle, 2)
 
     # Draw agents
     for r, theta in agent_locations:
