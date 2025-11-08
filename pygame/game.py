@@ -42,6 +42,9 @@ while running and frame_counter < total_frames:
 
     screen.fill(WHITE)
 
+    # Draw the table
+    pygame.draw.circle(screen, BLACK, (screen_width // 2, screen_height // 2), 180, 1)
+
     # Draw agents
     for r, theta in agent_locations:
         x, y = polar_to_cartesian(r, theta)
