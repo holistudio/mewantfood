@@ -195,20 +195,16 @@ class Environment(object):
             return True
         return False
     
-    def check_fed(self):
-        # get all spoon head locations that have food
-        spoons_w_food = [self.spoons[i] for i in range(self.n_seats) if self.spoons[i].has_food]
-        players_w_food = [self.players[f"player_{s.player_id}"] for s in spoons_w_food]
-        
-        spoon_heads_w_food = []
-        for i,s in enumerate(spoons_w_food):
-            pr, ptheta = players_w_food[i].location
-            sr, stheta = s.length, s.theta
-            px, py = polar_to_cartesian(pr, ptheta)
+    def check_feed_range(self, spoon_id):
+        """
+        checks if spoon can release food into a player's open mouth
+        assume spoon already has food and player has already decided to release food
+        """
+        spoon = self.spoons[spoon_id]
+        assert spoon.has_food
 
-            sx, sy = polar_to_cartesian(sr, stheta)
-            sx, sy = sx+px, sy+py
-            spoon_heads_w_food.append((sx,sy))
+        sr, stheta = spoon.length, spoon.theta
+        sx, sy = polar_to_cartesian(sr, stheta)
         
         # get locations of all players with open mouth
         players_open = [self.players[f"player_{i}"] for i in range(self.n_seats) if self.players[f"player_{i}"].mouth_open]
@@ -218,19 +214,18 @@ class Environment(object):
             px, py = polar_to_cartesian(pr, ptheta)
             players_open_locs.append((px, py))
 
-        players_fed = []
-        spoons_fed = []
-        # compare distance between all spoon heads with food and open mouth players
+        players_fed = -1
+        spoons_fed = -1
+        # compare distance between spoon head and open mouth players
         # are within the feed distance
-        for i in range(len(spoon_heads_w_food)):
-            sx, sy = spoon_heads_w_food[i]
-            for j in range(len(players_open_locs)):
-                px, py = players_open_locs
-                if distance((sx, sy),(px, py)) <= self.feed_dist:
-                    spoons_fed.append(spoons_w_food[i].id)
-                    players_fed.append(players_open[j].id)
+        for j in range(len(players_open_locs)):
+            px, py = players_open_locs
+            if distance((sx, sy),(px, py)) <= self.feed_dist:
+                spoons_fed = spoon.id
+                players_fed = players_open[j].id
+                break
         
-        # return which players are fed and which spoons are fed and should be empty
+        # return which player is fed and which spoon should be empty
         return players_fed, spoons_fed
     
     def release_food(self, player_id, spoon_id):
