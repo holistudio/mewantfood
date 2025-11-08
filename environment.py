@@ -331,8 +331,8 @@ class Environment(object):
         st_min, st_max = self.action_space["spoon_theta"]
         sl = random.uniform(sl_min, sl_max)
         st = random.uniform(st_min, st_max)
-        o = random.random > 0.5
-        p = random.random > 0.5
-        d = random.random > 0.5
+        o = random.random() > 0.5
+        p = random.random() > 0.5
+        d = random.random() > 0.5
         return sl, st, o, p, d
 
