@@ -9,6 +9,8 @@ pygame.init()
 screen_width = 800
 screen_height = 600
 
+FOOD_SIZE = 10
+
 agent_locations = [(200,0), (200,90), (200,180), (200,270)]
 mouth_locations = [(a[0]-5,a[1]) for a in agent_locations]
 food_locations  = [(160,0), (160,90), (160,180), (160,270)]
@@ -61,12 +63,11 @@ while running and frame_counter < total_frames:
         pygame.draw.circle(screen, WHITE, (screen_x, screen_y), 4, 1)
 
     # Draw food
-    food_size = 5
     for r, theta in food_locations:
         x, y = polar_to_cartesian(r, theta)
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
-        pygame.draw.rect(screen, RED, (screen_x - food_size // 2, screen_y - food_size // 2, food_size, food_size))
+        pygame.draw.rect(screen, RED, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
 
     pygame.display.flip()
     clock.tick(fps)
