@@ -13,7 +13,7 @@ AGENT_SIZE = FOOD_SIZE = 10
 
 agent_locations = [(200,0), (200,90), (200,180), (200,270)]
 mouth_locations = [(a[0]-5,a[1]) for a in agent_locations]
-food_locations  = [(160,0), (160,90), (160,180), (160,270)]
+
 
 agent_forwards = []
 for r, theta in agent_locations:
@@ -66,6 +66,7 @@ while running and frame_counter < total_frames:
 
     spoon_lengths = [200, 110, 209, 501]
     spoon_angles = [0, 10, -10, -45]
+    food_locations  = [(160,0), (160,90), (160,180), (160,270)]
 
     screen.fill(WHITE)
 
