@@ -22,7 +22,7 @@ for r, theta in agent_locations:
     unit_vector = (-math.cos(theta_rad), -math.sin(theta_rad))
     agent_forwards.append(unit_vector)
 
-spoon_angles = [0, 10, -10, -45]
+
 
 def polar_to_cartesian(r, theta):
     # assume theta is in degrees
@@ -54,6 +54,9 @@ while running and frame_counter < total_frames:
         if event.type == pygame.QUIT:
             running = False
 
+    spoon_lengths = [200, 110, 209, 501]
+    spoon_angles = [0, 10, -10, -45]
+
     screen.fill(WHITE)
 
     # Draw the table
@@ -75,7 +78,7 @@ while running and frame_counter < total_frames:
 
         # Calculate the spoon's absolute angle
         spoon_angle = theta + 180 + spoon_angles[i]
-        end_x_cart, end_y_cart = polar_to_cartesian(200, spoon_angle)
+        end_x_cart, end_y_cart = polar_to_cartesian(spoon_lengths[i], spoon_angle)
         end_x = start_x + int(end_x_cart)
         end_y = start_y + int(end_y_cart)
         pygame.draw.line(screen, BLACK, (start_x, start_y), (end_x, end_y), 2)
