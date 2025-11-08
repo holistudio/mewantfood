@@ -22,7 +22,13 @@ pip install -r requirements.txt
 
 ## Running
 
+
 ```
 python simulation.py
 ```
 
+then playback via PyGame:
+
+```
+python playback.py
+```
