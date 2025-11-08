@@ -3,8 +3,11 @@ import sys
 import math
 import json
 
-playback_json = 'playback.json'
+info_json = 'info.json'
+playback_json = 'record.json'
 
+with open(info_json, 'r') as f:
+    info = json.load(f)
 with open(playback_json, 'r') as f:
     trajectory = json.load(f)['trajectory']
 
@@ -15,11 +18,11 @@ pygame.init()
 screen_width = 800
 screen_height = 600
 
-TABLE_RADIUS = 180
+TABLE_RADIUS = info['radius']
 
 AGENT_SIZE = FOOD_SIZE = 10
 
-agent_locations = [(p[0],p[1]) for p in trajectory[0]['player_locations']]
+agent_locations = [(p[0],p[1]) for p in info['player_locations']]
 mouth_locations = [(a[0]-5,a[1]) for a in agent_locations]
 
 
