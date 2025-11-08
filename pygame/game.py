@@ -14,6 +14,7 @@ AGENT_SIZE = FOOD_SIZE = 10
 agent_locations = [(200,0), (200,90), (200,180), (200,270)]
 mouth_locations = [(a[0]-5,a[1]) for a in agent_locations]
 food_locations  = [(160,0), (160,90), (160,180), (160,270)]
+
 agent_forwards = []
 for r, theta in agent_locations:
     theta_rad = theta * math.pi / 180
@@ -21,6 +22,7 @@ for r, theta in agent_locations:
     unit_vector = (-math.cos(theta_rad), -math.sin(theta_rad))
     agent_forwards.append(unit_vector)
 
+spoon_angles = [0, 10, -10, -45]
 
 def polar_to_cartesian(r, theta):
     # assume theta is in degrees
@@ -75,6 +77,20 @@ while running and frame_counter < total_frames:
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
         pygame.draw.rect(screen, RED, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
+
+    # Draw spoons
+    for i, (r, theta) in enumerate(agent_locations):
+        # Agent's center in screen coordinates
+        agent_x_cart, agent_y_cart = polar_to_cartesian(r, theta)
+        start_x = int(screen_width / 2 + agent_x_cart)
+        start_y = int(screen_height / 2 + agent_y_cart)
+
+        # Calculate the spoon's absolute angle
+        spoon_angle = theta + 180 + spoon_angles[i]
+        end_x_cart, end_y_cart = polar_to_cartesian(180, spoon_angle)
+        end_x = start_x + int(end_x_cart)
+        end_y = start_y + int(end_y_cart)
+        pygame.draw.line(screen, BLACK, (start_x, start_y), (end_x, end_y), 2)
 
     pygame.display.flip()
     clock.tick(fps)
