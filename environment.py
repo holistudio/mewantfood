@@ -256,11 +256,13 @@ class Environment(object):
 
         sx, sy = sx+px, sy+py
 
-        foods_picked = []
+        foods_picked = -1
         for food_id in self.foods.keys():
             food = self.foods[food_id]
             fr, ftheta = food.location
             fx, fy = polar_to_cartesian(fr, ftheta)
             if distance((sx,sy), (fx,fy)) <= self.feed_dist:
-                foods_picked.append(food_id)
+                foods_picked = food_id
+                break
         return foods_picked
+    
