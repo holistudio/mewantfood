@@ -294,6 +294,7 @@ class Environment(object):
             yield agent
             self.player_ptr = (self.player_ptr + 1) % self.n_seats
             if self.player_ptr == 0:
+                self.log_history()
                 self.t += 1
             if self.t >= self.max_timesteps:
                 break  # truncate episode
@@ -331,7 +332,7 @@ class Environment(object):
         # update agent hunger
         current_player.step()
         
-        self.log_history()
+        
         pass
 
     def last(self):
