@@ -74,7 +74,7 @@ class Player(object):
         pass
 
 class Environment(object):
-    def __init__(self, r, n_seats, max_spoon_angle=45, feed_dist= 0.1, include_other_rew=False, max_timesteps=10):
+    def __init__(self, r, n_seats, max_spoon_angle=45, feed_dist= 0.1, include_other_rew=False, max_timesteps=100):
         self.radius = r
         self.n_seats = n_seats
 
@@ -141,6 +141,7 @@ class Environment(object):
     
     def state(self):
         state_dict = {
+            "time_step": self.t,
             "player_locations": self.player_locations(),
             "player_mouths_open": self.player_mouths_open(),
             "food_locations": self.food_locations(),
@@ -181,23 +182,23 @@ class Environment(object):
         idx = player_id + 1
         looped = False
         while not looped:
-            obs_dict['player_locations'].append(self.state()['player_locations'][idx])
-            obs_dict['player_mouths_open'].append(self.state()['player_mouths_open'][idx])
-            obs_dict['food_locations'].append(self.state()['food_locations'][idx])
-            obs_dict['spoon_lengths'].append(self.state()['spoon_lengths'][idx])
-            obs_dict['spoon_thetas'].append(self.state()['spoon_thetas'][idx])
-
-            # for when rewards are provided in the observation
-            # ONLY the OTHER players' rewards are given as part of the observation
-            if self.include_other_rew:
-                obs_dict["player_rewards"].append(self.state()["player_rewards"][idx])
-
-            idx += 1
-            if idx == player_id:
-                looped = True
             if idx >= self.n_seats:
                 idx = 0
+            if idx == player_id:
+                looped = True
+            else:
+                obs_dict['player_locations'].append(self.state()['player_locations'][idx])
+                obs_dict['player_mouths_open'].append(self.state()['player_mouths_open'][idx])
+                obs_dict['food_locations'].append(self.state()['food_locations'][idx])
+                obs_dict['spoon_lengths'].append(self.state()['spoon_lengths'][idx])
+                obs_dict['spoon_thetas'].append(self.state()['spoon_thetas'][idx])
 
+                # for when rewards are provided in the observation
+                # ONLY the OTHER players' rewards are given as part of the observation
+                if self.include_other_rew:
+                    obs_dict["player_rewards"].append(self.state()["player_rewards"][idx])
+
+                idx += 1
         return obs_dict
     
     def rewards(self):
@@ -288,16 +289,14 @@ class Environment(object):
         food.location = (-1, -1)
 
     def agent_iter(self):
-        if self.check_terminal():
-            return []
-        
-        if self.player_ptr >= self.n_seats:
-            self.t += 1
-            self.player_ptr = 0
-        else:
-            self.player_ptr += 1
-        
-        return itertools.cycle(self.players.keys())
+        while not self.check_terminal():
+            agent = list(self.players.keys())[self.player_ptr]
+            yield agent
+            self.player_ptr = (self.player_ptr + 1) % self.n_seats
+            if self.player_ptr == 0:
+                self.t += 1
+            if self.t >= self.max_timesteps:
+                break  # truncate episode
     
     def step(self, action):
         if action is None:
