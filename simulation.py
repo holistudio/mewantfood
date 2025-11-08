@@ -16,3 +16,5 @@ for agent in env.agent_iter():
     env.step(action)
 
 print(env.rewards())
+
+env.reset()
