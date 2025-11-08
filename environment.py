@@ -111,6 +111,8 @@ class Environment(object):
         self.terminal = False
         self.t = 0
         self.max_timesteps = max_timesteps
+
+        self.player_ptr = 0
         pass
 
     def player_locations(self):
@@ -272,3 +274,9 @@ class Environment(object):
 
         food = self.foods[food_id]
         food.location = (-1, -1)
+
+    def iter(self):
+        if self.player_ptr >= self.n_seats:
+            self.player_ptr = 0
+        else:
+            self.player_ptr += 1
