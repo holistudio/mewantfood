@@ -2,6 +2,7 @@ import math
 import random
 import copy
 import json
+import itertools
 
 def polar_to_cartesian(r, theta):
     # assume theta is in degrees
@@ -73,7 +74,7 @@ class Player(object):
         pass
 
 class Environment(object):
-    def __init__(self, r, n_seats, max_spoon_angle=45, feed_dist= 0.1, include_other_rew=False, max_timesteps=5000):
+    def __init__(self, r, n_seats, max_spoon_angle=45, feed_dist= 0.1, include_other_rew=False, max_timesteps=10):
         self.radius = r
         self.n_seats = n_seats
 
@@ -288,7 +289,7 @@ class Environment(object):
 
     def agent_iter(self):
         if self.check_terminal():
-            raise StopIteration
+            return []
         
         if self.player_ptr >= self.n_seats:
             self.t += 1
@@ -296,7 +297,7 @@ class Environment(object):
         else:
             self.player_ptr += 1
         
-        return iter(self.players.keys())
+        return itertools.cycle(self.players.keys())
     
     def step(self, action):
         if action is None:
