@@ -291,6 +291,7 @@ class Environment(object):
             raise StopIteration
         
         if self.player_ptr >= self.n_seats:
+            self.t += 1
             self.player_ptr = 0
         else:
             self.player_ptr += 1
@@ -327,7 +328,9 @@ class Environment(object):
                 # if so, release food
                 self.release_food()
         
-        self.t += 1
+        # update agent hunger
+        current_player.step()
+        
         self.log_history()
         pass
 
