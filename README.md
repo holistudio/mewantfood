@@ -2,6 +2,10 @@
 
 agent-based simulation of the [allegory of the long spoons](https://en.wikipedia.org/wiki/Allegory_of_the_long_spoons)
 
+<img src="preview.png">
+
+Black circles represent the agents seated at the table as they try to eat the red square foods with the long spoons. Tiny white circles indicate if the agent has opened its mouth to receive food.
+
 ## Installation
 
 Virtual/conda environment:
