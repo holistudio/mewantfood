@@ -166,7 +166,7 @@ while running and frame_counter < total_frames:
                 
                 x2, y2 = p2_x, p2_y
                 x3, y3 = p3_x, p3_y
-                pygame.draw.polygon(screen, RED, [(x1, y1), (x2, y2), (x3, y3)])
+                pygame.draw.polygon(screen, BG_COLOR, [(x1, y1), (x2, y2), (x3, y3)])
             else:
                 pygame.draw.circle(screen, BG_COLOR, (screen_x, screen_y), 4)
 
