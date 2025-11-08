@@ -305,7 +305,7 @@ class Environment(object):
                 self.release_food()
         pass
 
-    def sample(self, player):
+    def action_sample(self):
         sl_min, sl_max = self.action_space["spoon_length"]
         st_min, st_max = self.action_space["spoon_theta"]
         sl = random.uniform(sl_min, sl_max)
