@@ -294,8 +294,8 @@ class Environment(object):
             self.player_ptr = 0
         else:
             self.player_ptr += 1
-        self.t += 1
-        return f"player_{int(self.player_ptr)}"
+        
+        return iter(self.players.keys())
     
     def step(self, action):
         if action is None:
@@ -327,6 +327,7 @@ class Environment(object):
                 # if so, release food
                 self.release_food()
         
+        self.t += 1
         self.log_history()
         pass
 
