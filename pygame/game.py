@@ -9,6 +9,8 @@ pygame.init()
 screen_width = 800
 screen_height = 600
 
+TABLE_RADIUS = 180
+
 AGENT_SIZE = FOOD_SIZE = 10
 
 agent_locations = [(200,0), (200,90), (200,180), (200,270)]
@@ -71,7 +73,7 @@ while running and frame_counter < total_frames:
     screen.fill(WHITE)
 
     # Draw the table
-    pygame.draw.circle(screen, BLACK, (screen_width // 2, screen_height // 2), 180, 1)
+    pygame.draw.circle(screen, BLACK, (screen_width // 2, screen_height // 2), TABLE_RADIUS, 1)
 
     # Draw food
     for r, theta in food_locations:
