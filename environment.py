@@ -253,15 +253,15 @@ class Environment(object):
 
         sx, sy = sx+px, sy+py
 
-        foods_picked = -1
+        food_picked = -1
         for food_id in self.foods.keys():
             food = self.foods[food_id]
             fr, ftheta = food.location
             fx, fy = polar_to_cartesian(fr, ftheta)
             if distance((sx,sy), (fx,fy)) <= self.feed_dist:
-                foods_picked = food_id
+                food_picked = food_id
                 break
-        return foods_picked
+        return food_picked
     
     def pickup_food(self, spoon_id, food_id):
         spoon = self.spoons[spoon_id]
@@ -299,9 +299,10 @@ class Environment(object):
         if pick_food:
             # if pick_food is True
             # check if it's possible to pick up food
-            if self.check_pickup(current_spoon.id):
+            food_picked = self.check_pickup(current_spoon.id)
+            if food_picked != -1:
                 # if so, pickup food
-                self.pickup_food(current_spoon.id)
+                self.pickup_food(current_spoon.id, food_picked)
 
         if current_spoon.has_food:
             # if current spoon has food
