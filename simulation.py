@@ -17,4 +17,6 @@ for agent in env.agent_iter():
 
 print(env.rewards())
 
+env.save_info()
+env.save_log()
 env.reset()
