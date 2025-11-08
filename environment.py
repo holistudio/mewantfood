@@ -164,16 +164,16 @@ class Environment(object):
         idx = player_id + 1
         looped = False
         while not looped:
-            obs_dict['player_locations'].append(self.state['player_locations'][idx])
-            obs_dict['player_mouths_open'].append(self.state['player_mouths_open'][idx])
-            obs_dict['food_locations'].append(self.state['food_locations'][idx])
-            obs_dict['spoon_lengths'].append(self.state['spoon_lengths'][idx])
-            obs_dict['spoon_thetas'].append(self.state['spoon_thetas'][idx])
+            obs_dict['player_locations'].append(self.state()['player_locations'][idx])
+            obs_dict['player_mouths_open'].append(self.state()['player_mouths_open'][idx])
+            obs_dict['food_locations'].append(self.state()['food_locations'][idx])
+            obs_dict['spoon_lengths'].append(self.state()['spoon_lengths'][idx])
+            obs_dict['spoon_thetas'].append(self.state()['spoon_thetas'][idx])
 
             # for when rewards are provided in the observation
             # ONLY the OTHER players' rewards are given as part of the observation
             if self.include_other_rew:
-                obs_dict["player_rewards"].append(self.state["player_rewards"][idx])
+                obs_dict["player_rewards"].append(self.state()["player_rewards"][idx])
 
             idx += 1
             if idx == player_id:
