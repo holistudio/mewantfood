@@ -271,6 +271,9 @@ class Environment(object):
         food.location = (-1, -1)
 
     def agent_iter(self):
+        if self.check_terminal():
+            raise StopIteration
+        
         if self.player_ptr >= self.n_seats:
             self.player_ptr = 0
         else:
@@ -305,6 +308,12 @@ class Environment(object):
                 self.release_food()
         pass
 
+    def last(self):
+        termination = self.check_terminal()
+        truncation = termination
+        reward = self.rewards()[f"player_{int(self.player_ptr)}"]
+        return observation, reward, termination, truncation
+    
     def action_sample(self):
         sl_min, sl_max = self.action_space["spoon_length"]
         st_min, st_max = self.action_space["spoon_theta"]
