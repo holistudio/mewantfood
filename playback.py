@@ -126,6 +126,7 @@ while running and frame_counter < total_frames:
         start_y = int(screen_height / 2 + agent_y_cart)
 
         # Calculate the spoon's absolute angle
+        # The agent's forward direction angle is theta + 180.
         spoon_angle = theta + 180 + spoon_thetas[i]
         end_x_cart, end_y_cart = polar_to_cartesian(spoon_lengths[i], spoon_angle)
         end_x = start_x + int(end_x_cart)
