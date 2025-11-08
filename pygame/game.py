@@ -10,6 +10,7 @@ screen_width = 800
 screen_height = 600
 
 agent_locations = [(200,0), (200,90), (200,180), (200,270)]
+mouth_locations = [(a[0]-5,a[1]) for a in agent_locations]
 
 def polar_to_cartesian(r, theta):
     # assume theta is in degrees
@@ -51,6 +52,11 @@ while running and frame_counter < total_frames:
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
         pygame.draw.circle(screen, BLACK, (screen_x, screen_y), 10)
+    for r, theta in mouth_locations:
+        x, y = polar_to_cartesian(r, theta)
+        screen_x = int(screen_width / 2 + x)
+        screen_y = int(screen_height / 2 + y)
+        pygame.draw.circle(screen, WHITE, (screen_x, screen_y), 4, 1)
     pygame.display.flip()
     clock.tick(fps)
     frame_counter += 1
