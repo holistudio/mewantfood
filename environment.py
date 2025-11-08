@@ -158,7 +158,7 @@ class Environment(object):
         self.log['trajectory'].append(copy.deepcopy(self.state()))
         pass
 
-    def save_log(self, filename="playback.json"):
+    def save_log(self, filename="record.json"):
         with open(filename, 'w') as f:
             json.dump(self.log,f)
 
