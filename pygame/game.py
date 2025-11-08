@@ -10,7 +10,6 @@ screen_width = 800
 screen_height = 600
 
 agent_locations = [(185,0), (185,90), (185,180), (185,270)]
-# Colors
 
 def polar_to_cartesian(r, theta):
     # assume theta is in degrees
@@ -18,6 +17,8 @@ def polar_to_cartesian(r, theta):
     x = r * math.cos(theta_rad)
     y = r * math.sin(theta_rad)
     return x, y
+
+# Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
