@@ -78,8 +78,8 @@ class Environment(object):
         self.radius = r
         self.n_seats = n_seats
 
-        player_offset = 1
-        food_offset = 1
+        player_offset = 20
+        food_offset = -20
 
         self.players = {}
         self.spoons = {}
@@ -121,7 +121,7 @@ class Environment(object):
         self.log ={
             "trajectory":[]
         }
-        self.log_history()
+        # self.log_history()
         pass
 
     def player_locations(self):
