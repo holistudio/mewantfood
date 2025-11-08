@@ -11,6 +11,7 @@ screen_height = 600
 
 agent_locations = [(200,0), (200,90), (200,180), (200,270)]
 mouth_locations = [(a[0]-5,a[1]) for a in agent_locations]
+food_locations  = [(160,0), (160,90), (160,180), (160,270)]
 
 def polar_to_cartesian(r, theta):
     # assume theta is in degrees
@@ -22,6 +23,7 @@ def polar_to_cartesian(r, theta):
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+RED = (255, 0, 0)
 
 # Create the screen
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -57,6 +59,15 @@ while running and frame_counter < total_frames:
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
         pygame.draw.circle(screen, WHITE, (screen_x, screen_y), 4, 1)
+
+    # Draw food
+    food_size = 5
+    for r, theta in food_locations:
+        x, y = polar_to_cartesian(r, theta)
+        screen_x = int(screen_width / 2 + x)
+        screen_y = int(screen_height / 2 + y)
+        pygame.draw.rect(screen, RED, (screen_x - food_size // 2, screen_y - food_size // 2, food_size, food_size))
+
     pygame.display.flip()
     clock.tick(fps)
     frame_counter += 1
