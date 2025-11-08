@@ -1,5 +1,6 @@
 import pygame
 import sys
+import math
 
 # Initialize Pygame
 pygame.init()
@@ -8,8 +9,17 @@ pygame.init()
 screen_width = 800
 screen_height = 600
 
+agent_locations = [(185,0), (185,90), (185,180), (185,270)]
 # Colors
+
+def polar_to_cartesian(r, theta):
+    # assume theta is in degrees
+    theta_rad = theta * math.pi / 180
+    x = r * math.cos(theta_rad)
+    y = r * math.sin(theta_rad)
+    return x, y
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 # Create the screen
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -30,6 +40,13 @@ while running and frame_counter < total_frames:
             running = False
 
     screen.fill(WHITE)
+
+    # Draw agents
+    for r, theta in agent_locations:
+        x, y = polar_to_cartesian(r, theta)
+        screen_x = int(screen_width / 2 + x)
+        screen_y = int(screen_height / 2 + y)
+        pygame.draw.circle(screen, BLACK, (screen_x, screen_y), 10)
     pygame.display.flip()
     clock.tick(fps)
     frame_counter += 1
