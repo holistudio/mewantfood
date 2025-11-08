@@ -282,6 +282,9 @@ class Environment(object):
         return f"player_{int(self.player_ptr)}"
     
     def step(self, action):
+        if action is None:
+            return
+        
         current_player = self.players[f"player_{int(self.player_ptr)}"]
         current_spoon = self.spoons[int(self.player_ptr)]
 
