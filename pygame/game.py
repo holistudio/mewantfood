@@ -9,7 +9,7 @@ pygame.init()
 screen_width = 800
 screen_height = 600
 
-agent_locations = [(185,0), (185,90), (185,180), (185,270)]
+agent_locations = [(200,0), (200,90), (200,180), (200,270)]
 
 def polar_to_cartesian(r, theta):
     # assume theta is in degrees
@@ -24,7 +24,7 @@ BLACK = (0, 0, 0)
 
 # Create the screen
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Pygame Game")
+pygame.display.set_caption("mewantfood")
 
 # Clock for controlling the frame rate
 clock = pygame.time.Clock()
