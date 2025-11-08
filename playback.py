@@ -3,6 +3,8 @@ import sys
 import math
 import json
 
+PACMAN_MODE = True
+
 info_json = 'info.json'
 playback_json = 'record.json'
 
@@ -20,7 +22,11 @@ screen_height = 600
 
 TABLE_RADIUS = info['radius']
 
-AGENT_SIZE = FOOD_SIZE = 10
+if PACMAN_MODE:
+    AGENT_SIZE = 15
+    FOOD_SIZE = AGENT_SIZE // 2
+else:
+    AGENT_SIZE = FOOD_SIZE = 15
 
 agent_locations = [(p[0],p[1]) for p in info['player_locations']]
 mouth_locations = [(a[0]-5,a[1]) for a in agent_locations]
@@ -59,10 +65,16 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
 
-BG_COLOR = WHITE
-STROKE_COLOR = BLACK
-AGENT_COLOR = BLACK
-FOOD_COLOR = RED
+if PACMAN_MODE:
+    BG_COLOR = BLACK
+    STROKE_COLOR = BLUE
+    AGENT_COLOR = YELLOW
+    FOOD_COLOR = BLUE
+else:
+    BG_COLOR = WHITE
+    STROKE_COLOR = BLACK
+    AGENT_COLOR = BLACK
+    FOOD_COLOR = RED
 
 THIN_STROKE = 1
 THICK_STROKE = 2
@@ -101,7 +113,10 @@ while running and frame_counter < total_frames:
         x, y = polar_to_cartesian(r, theta)
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
-        pygame.draw.rect(screen, FOOD_COLOR, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
+        if PACMAN_MODE:
+            pygame.draw.circle(screen, FOOD_COLOR, (screen_x, screen_y), FOOD_SIZE)
+        else:
+            pygame.draw.rect(screen, FOOD_COLOR, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
 
     # Draw spoons
     for i, (r, theta) in enumerate(agent_locations):
@@ -134,7 +149,20 @@ while running and frame_counter < total_frames:
             x, y = polar_to_cartesian(r, theta)
             screen_x = int(screen_width / 2 + x)
             screen_y = int(screen_height / 2 + y)
-            pygame.draw.circle(screen, BG_COLOR, (screen_x, screen_y), 4)
+            if PACMAN_MODE:
+                agent_location = agent_locations[i]
+                ar, at = agent_location
+                x1, y1 = polar_to_cartesian(ar, at)
+                x1 = int(screen_width / 2 + x1)
+                y1 = int(screen_height / 2 + y1)
+
+                x2 = x1+AGENT_SIZE
+                y2 = y1-AGENT_SIZE
+                x3 = x1+AGENT_SIZE
+                y3 = y1+AGENT_SIZE
+                pygame.draw.polygon(screen, RED, [(x1, y1), (x2, y2), (x3, y3)])
+            else:
+                pygame.draw.circle(screen, BG_COLOR, (screen_x, screen_y), 4)
 
     
 
