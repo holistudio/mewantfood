@@ -82,8 +82,8 @@ class Environment(object):
         self.radius = r
         self.n_seats = n_seats
 
-        player_offset = 20
-        food_offset = -20
+        self.player_offset = 20
+        self.food_offset = -20
 
         self.players = {}
         self.spoons = {}
@@ -92,15 +92,15 @@ class Environment(object):
         theta = 0
         theta_inc = 360/n_seats
 
-        min_spoon_len = player_offset + r * 2 - food_offset
-        max_spoon_len = min_spoon_len + food_offset + player_offset
+        min_spoon_len = self.player_offset + r * 2 - self.food_offset
+        max_spoon_len = min_spoon_len + self.food_offset + self.player_offset
 
         self.max_spoon_angle = max_spoon_angle
         self.min_spoon_angle = -max_spoon_angle
 
         for i in range(n_seats):
-            self.foods[i] = Food(id=i, r=r + food_offset, theta=theta)
-            self.players[f"player_{i}"] = Player(id=i, r=r + player_offset, theta=theta, spoon_id=i)
+            self.foods[i] = Food(id=i, r=r + self.food_offset, theta=theta)
+            self.players[f"player_{i}"] = Player(id=i, r=r + self.player_offset, theta=theta, spoon_id=i)
             self.spoons[i] = Spoon(id=i, length=(min_spoon_len + max_spoon_len)/2, theta=0, player_id=i)
             theta += theta_inc
 
@@ -161,6 +161,18 @@ class Environment(object):
     def save_log(self, filename="record.json"):
         with open(filename, 'w') as f:
             json.dump(self.log,f)
+
+    def save_info(self, filename="info.json"):
+        info_dict = {
+            "radius": self.radius,
+            "n_seats": self.n_seats,
+            "player_locations": self.player_locations(),
+            "player_offset": self.player_offset,
+            "food_offset": self.food_offset,
+            "action_space": self.action_space
+        }
+        with open(filename, 'w') as f:
+            json.dump(info_dict,f)
 
     def observation(self, player):
         """
@@ -349,7 +361,7 @@ class Environment(object):
         return obs_dict, reward, termination, truncation
     
     def reset(self):
-        self.save_log()
+        # self.save_log()
         self.__init__(r=self.radius, 
                       n_seats=self.n_seats, 
                       max_spoon_angle=self.max_spoon_angle, 
