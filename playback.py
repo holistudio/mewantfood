@@ -3,7 +3,7 @@ import sys
 import math
 import json
 
-PACMAN_MODE = True
+PACMAN_MODE = False
 
 info_json = 'info.json'
 playback_json = 'record.json'
@@ -29,7 +29,7 @@ else:
     AGENT_SIZE = FOOD_SIZE = 15
 
 agent_locations = [(p[0],p[1]) for p in info['player_locations']]
-mouth_locations = [(a[0]-5,a[1]) for a in agent_locations]
+mouth_locations = [(a[0]-12,a[1]) for a in agent_locations]
 
 
 agent_forwards = []
@@ -150,26 +150,26 @@ while running and frame_counter < total_frames:
             x, y = polar_to_cartesian(r, theta)
             screen_x = int(screen_width / 2 + x)
             screen_y = int(screen_height / 2 + y)
-            if PACMAN_MODE:
-                agent_location = agent_locations[i]
-                ar, at = agent_location
-                x1, y1 = polar_to_cartesian(ar, at)
-                x1 = int(screen_width / 2 + x1)
-                y1 = int(screen_height / 2 + y1)
-                
-                forward_x, forward_y = agent_forwards[i]
-                
-                # p2 and p3 are perpendicular to the forward vector
-                p2_x = x1 + forward_x * AGENT_SIZE - (-forward_y) * AGENT_SIZE
-                p2_y = y1 + forward_y * AGENT_SIZE - forward_x * AGENT_SIZE
-                p3_x = x1 + forward_x * AGENT_SIZE + (-forward_y) * AGENT_SIZE
-                p3_y = y1 + forward_y * AGENT_SIZE + forward_x * AGENT_SIZE
-                
-                x2, y2 = p2_x, p2_y
-                x3, y3 = p3_x, p3_y
-                pygame.draw.polygon(screen, BG_COLOR, [(x1, y1), (x2, y2), (x3, y3)])
-            else:
-                pygame.draw.circle(screen, BG_COLOR, (screen_x, screen_y), 4)
+
+            agent_location = agent_locations[i]
+            ar, at = agent_location
+            x1, y1 = polar_to_cartesian(ar, at)
+            x1 = int(screen_width / 2 + x1)
+            y1 = int(screen_height / 2 + y1)
+            
+            forward_x, forward_y = agent_forwards[i]
+            
+            # p2 and p3 are perpendicular to the forward vector
+            p2_x = x1 + forward_x * AGENT_SIZE - (-forward_y) * AGENT_SIZE
+            p2_y = y1 + forward_y * AGENT_SIZE - forward_x * AGENT_SIZE
+            p3_x = x1 + forward_x * AGENT_SIZE + (-forward_y) * AGENT_SIZE
+            p3_y = y1 + forward_y * AGENT_SIZE + forward_x * AGENT_SIZE
+            
+            x2, y2 = p2_x, p2_y
+            x3, y3 = p3_x, p3_y
+            pygame.draw.polygon(screen, BG_COLOR, [(x1, y1), (x2, y2), (x3, y3)])
+            # else:
+            #     pygame.draw.circle(screen, BG_COLOR, (screen_x, screen_y), 4)
 
     
 
