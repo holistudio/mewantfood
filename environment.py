@@ -266,3 +266,9 @@ class Environment(object):
                 break
         return foods_picked
     
+    def pickup_food(self, spoon_id, food_id):
+        spoon = self.spoons[spoon_id]
+        spoon.pick_up(food_id)
+
+        food = self.foods[food_id]
+        food.location = (-1, -1)
