@@ -14,6 +14,13 @@ AGENT_SIZE = FOOD_SIZE = 10
 agent_locations = [(200,0), (200,90), (200,180), (200,270)]
 mouth_locations = [(a[0]-5,a[1]) for a in agent_locations]
 food_locations  = [(160,0), (160,90), (160,180), (160,270)]
+agent_forwards = []
+for r, theta in agent_locations:
+    theta_rad = theta * math.pi / 180
+    # unit vector pointing towards the center (0,0) from the agent's location
+    unit_vector = (-math.cos(theta_rad), -math.sin(theta_rad))
+    agent_forwards.append(unit_vector)
+
 
 def polar_to_cartesian(r, theta):
     # assume theta is in degrees
