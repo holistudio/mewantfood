@@ -65,7 +65,7 @@ while running and frame_counter < total_frames:
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
         pygame.draw.rect(screen, RED, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
-        
+
     # Draw spoons
     for i, (r, theta) in enumerate(agent_locations):
         # Agent's center in screen coordinates
@@ -75,7 +75,7 @@ while running and frame_counter < total_frames:
 
         # Calculate the spoon's absolute angle
         spoon_angle = theta + 180 + spoon_angles[i]
-        end_x_cart, end_y_cart = polar_to_cartesian(180, spoon_angle)
+        end_x_cart, end_y_cart = polar_to_cartesian(200, spoon_angle)
         end_x = start_x + int(end_x_cart)
         end_y = start_y + int(end_y_cart)
         pygame.draw.line(screen, BLACK, (start_x, start_y), (end_x, end_y), 2)
