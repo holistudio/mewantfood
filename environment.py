@@ -270,11 +270,13 @@ class Environment(object):
         food = self.foods[food_id]
         food.location = (-1, -1)
 
-    def iter(self):
+    def agent_iter(self):
         if self.player_ptr >= self.n_seats:
             self.player_ptr = 0
         else:
             self.player_ptr += 1
+        self.t += 1
+        return f"player_{int(self.player_ptr)}"
     
     def step(self, action):
         current_player = self.players[f"player_{int(self.player_ptr)}"]
