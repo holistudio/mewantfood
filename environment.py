@@ -245,7 +245,7 @@ class Environment(object):
         """
         spoon = self.spoons[spoon_id]
         sr, stheta = spoon.length, spoon.theta
-        sx, sy = spoon.location(sr, stheta)
+        sx, sy = polar_to_cartesian(sr, stheta)
 
         player = self.players[spoon.player_id]
         pr, ptheta = player.location
