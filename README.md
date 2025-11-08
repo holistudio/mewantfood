@@ -4,7 +4,11 @@ agent-based simulation of the [allegory of the long spoons](https://en.wikipedia
 
 <img src="preview.png">
 
-Black circles represent the agents seated at the table as they try to eat the red square foods with the long spoons. Tiny white circles indicate if the agent has opened its mouth to receive food.
+Black circles represent the agents seated at the table as they try to eat the red square foods with the long spoons. Partially open circles indicate if the agent has decided to open its mouth to receive food.
+
+Or in Pacman-style visualization...
+
+<img src="preview_pacman.png">
 
 ## Installation
 
