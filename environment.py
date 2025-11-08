@@ -215,28 +215,28 @@ class Environment(object):
             players_open_locs.append((px, py))
 
         players_fed = -1
-        spoons_fed = -1
         # compare distance between spoon head and open mouth players
         # are within the feed distance
         for j in range(len(players_open_locs)):
             px, py = players_open_locs
             if distance((sx, sy),(px, py)) <= self.feed_dist:
-                spoons_fed = spoon.id
                 players_fed = players_open[j].id
                 break
         
         # return which player is fed and which spoon should be empty
-        return players_fed, spoons_fed
+        return players_fed
     
-    def release_food(self, player_id, spoon_id):
+    def release_food(self, spoon_id):
+        player_id = self.check_feed_range(spoon_id)
+        if player_id != -1:
+            player = self.players[player_id]
+            player.hunger += 1
+
         spoon = self.spoons[spoon_id]
         food = self.foods[spoon.food_id]
 
         spoon.drop()
         food.reset()
-        
-        player = self.players[player_id]
-        player.hunger += 1
         pass
 
     def check_pickup(self, spoon_id):
