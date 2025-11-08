@@ -59,25 +59,13 @@ while running and frame_counter < total_frames:
     # Draw the table
     pygame.draw.circle(screen, BLACK, (screen_width // 2, screen_height // 2), 180, 1)
 
-    # Draw agents
-    for r, theta in agent_locations:
-        x, y = polar_to_cartesian(r, theta)
-        screen_x = int(screen_width / 2 + x)
-        screen_y = int(screen_height / 2 + y)
-        pygame.draw.circle(screen, BLACK, (screen_x, screen_y), AGENT_SIZE)
-    for r, theta in mouth_locations:
-        x, y = polar_to_cartesian(r, theta)
-        screen_x = int(screen_width / 2 + x)
-        screen_y = int(screen_height / 2 + y)
-        pygame.draw.circle(screen, WHITE, (screen_x, screen_y), 4)
-
     # Draw food
     for r, theta in food_locations:
         x, y = polar_to_cartesian(r, theta)
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
         pygame.draw.rect(screen, RED, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
-
+        
     # Draw spoons
     for i, (r, theta) in enumerate(agent_locations):
         # Agent's center in screen coordinates
@@ -91,6 +79,22 @@ while running and frame_counter < total_frames:
         end_x = start_x + int(end_x_cart)
         end_y = start_y + int(end_y_cart)
         pygame.draw.line(screen, BLACK, (start_x, start_y), (end_x, end_y), 2)
+
+    # Draw agents
+    for r, theta in agent_locations:
+        x, y = polar_to_cartesian(r, theta)
+        screen_x = int(screen_width / 2 + x)
+        screen_y = int(screen_height / 2 + y)
+        pygame.draw.circle(screen, BLACK, (screen_x, screen_y), AGENT_SIZE)
+    for r, theta in mouth_locations:
+        x, y = polar_to_cartesian(r, theta)
+        screen_x = int(screen_width / 2 + x)
+        screen_y = int(screen_height / 2 + y)
+        pygame.draw.circle(screen, WHITE, (screen_x, screen_y), 4)
+
+    
+
+    
 
     pygame.display.flip()
     clock.tick(fps)
