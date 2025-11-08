@@ -69,7 +69,7 @@ while running and frame_counter < total_frames:
         x, y = polar_to_cartesian(r, theta)
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
-        pygame.draw.circle(screen, WHITE, (screen_x, screen_y), 4, 1)
+        pygame.draw.circle(screen, WHITE, (screen_x, screen_y), 4)
 
     # Draw food
     for r, theta in food_locations:
