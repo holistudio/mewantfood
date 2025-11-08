@@ -155,11 +155,17 @@ while running and frame_counter < total_frames:
                 x1, y1 = polar_to_cartesian(ar, at)
                 x1 = int(screen_width / 2 + x1)
                 y1 = int(screen_height / 2 + y1)
-
-                x2 = x1+AGENT_SIZE
-                y2 = y1-AGENT_SIZE
-                x3 = x1+AGENT_SIZE
-                y3 = y1+AGENT_SIZE
+                
+                forward_x, forward_y = agent_forwards[i]
+                
+                # p2 and p3 are perpendicular to the forward vector
+                p2_x = x1 + forward_x * AGENT_SIZE - (-forward_y) * AGENT_SIZE
+                p2_y = y1 + forward_y * AGENT_SIZE - forward_x * AGENT_SIZE
+                p3_x = x1 + forward_x * AGENT_SIZE + (-forward_y) * AGENT_SIZE
+                p3_y = y1 + forward_y * AGENT_SIZE + forward_x * AGENT_SIZE
+                
+                x2, y2 = p2_x, p2_y
+                x3, y3 = p3_x, p3_y
                 pygame.draw.polygon(screen, RED, [(x1, y1), (x2, y2), (x3, y3)])
             else:
                 pygame.draw.circle(screen, BG_COLOR, (screen_x, screen_y), 4)
