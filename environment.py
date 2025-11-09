@@ -92,8 +92,8 @@ class Environment(object):
         theta = 0
         theta_inc = 360/n_seats
 
-        min_spoon_len = self.player_offset + r * 2 - self.food_offset
-        max_spoon_len = min_spoon_len + self.food_offset + self.player_offset
+        min_spoon_len = self.player_offset + r * 2 + self.food_offset
+        max_spoon_len = min_spoon_len - self.food_offset + self.player_offset
 
         self.max_spoon_angle = max_spoon_angle
         self.min_spoon_angle = -max_spoon_angle
@@ -104,12 +104,20 @@ class Environment(object):
             self.foods[i] = Food(id=i, x=fx, y=fy)
             px, py = polar_to_cartesian(r=r + self.player_offset, theta=theta)
             self.players[f"player_{i}"] = Player(id=i, x=px, y=py, spoon_id=i)
-            self.spoons[i] = Spoon(id=i, length=(min_spoon_len + max_spoon_len)/2, theta=0, player_id=i)
+            self.spoons[i] = Spoon(id=i, length=(min_spoon_len+max_spoon_len)//2, theta=0, player_id=i)
             theta += theta_inc
 
         self.feed_dist = feed_dist
 
         self.action_space = {
+            "spoon_length": (min_spoon_len, max_spoon_len),
+            "spoon_theta": (1, 0 -1),
+            "open_mouth": (False, True),
+            "pick_food": (False, True),
+            "drop_food": (False, True) # this is masked from the player unless they have food on their spoon
+        }
+
+        self.action_limits = {
             "spoon_length": (min_spoon_len, max_spoon_len),
             "spoon_theta": (-max_spoon_angle, max_spoon_angle),
             "open_mouth": (False, True),
@@ -263,7 +271,7 @@ class Environment(object):
         # compare distance between spoon head and open mouth players
         # are within the feed distance
         for j in range(len(players_open_locs)):
-            px, py = players_open_locs
+            px, py = players_open_locs[j]
             if distance((sx, sy),(px, py)) <= self.feed_dist:
                 players_fed = players_open[j].id
                 break
@@ -330,7 +338,14 @@ class Environment(object):
         spoon_length, spoon_theta, open_mouth, pick_food, drop_food = action
 
         # set spoon length and theta
-        current_spoon.length, current_spoon.theta = spoon_length, spoon_theta
+        current_spoon.length = spoon_length
+
+        # environment restricts spoon from rotating beyond min and max angles
+        theta_temp = current_spoon.theta + spoon_theta
+        if self.min_spoon_angle <= theta_temp <= self.max_spoon_angle:
+            current_spoon.theta += spoon_theta
+        else:
+            current_spoon.theta = current_spoon.theta
 
         # update food location if the spoon head has food
         if current_spoon.has_food:
@@ -346,6 +361,7 @@ class Environment(object):
             # check if it's possible to pick up food
             food_picked = self.check_pickup(current_spoon.id)
             if food_picked != -1:
+                print(f'Step{self.t}, player_{current_player.id} picked up food!')
                 # if so, pickup food
                 self.pickup_food(current_spoon.id, food_picked)
 
@@ -354,12 +370,11 @@ class Environment(object):
             # check drop_food
             if drop_food:
                 # if so, release food
-                self.release_food()
+                print(f'Step{self.t}, player_{current_player.id} dropped food!')
+                self.release_food(current_spoon.id)
         
         # update agent hunger
         current_player.step()
-        
-        
         pass
 
     def last(self):
@@ -380,9 +395,10 @@ class Environment(object):
 
     def action_sample(self):
         sl_min, sl_max = self.action_space["spoon_length"]
-        st_min, st_max = self.action_space["spoon_theta"]
+        n_thetas = len(self.action_space["spoon_theta"])
         sl = random.uniform(sl_min, sl_max)
-        st = random.uniform(st_min, st_max)
+        ix = random.randint(0, n_thetas-1)
+        st = self.action_space["spoon_theta"][ix]
         o = random.random() > 0.5
         p = random.random() > 0.5
         d = random.random() > 0.5
