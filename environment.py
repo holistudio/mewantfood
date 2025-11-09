@@ -19,10 +19,10 @@ def distance(p1, p2):
     return math.sqrt((p1x - p2x)**2 + (p1y - p2y)**2)
 
 class Food(object):
-    def __init__(self, id, r, theta):
+    def __init__(self, id, x, y):
         self.id = id
-        self.location = (r, theta)
-        self._initial_loc = (r, theta)
+        self.location = (x, y)
+        self._initial_loc = (x, y)
         pass
 
     def reset(self):
@@ -52,9 +52,9 @@ class Spoon(object):
         pass
 
 class Player(object):
-    def __init__(self, id, r, theta, spoon_id=-1, full_time_limit=10):
+    def __init__(self, id, x, y, spoon_id=-1, full_time_limit=10):
         self.id = id
-        self.location = (r, theta)
+        self.location = (x, y)
         self.mouth_open = False
         self.spoon_id = spoon_id
         self.hungry = True
@@ -99,8 +99,11 @@ class Environment(object):
         self.min_spoon_angle = -max_spoon_angle
 
         for i in range(n_seats):
-            self.foods[i] = Food(id=i, r=r + self.food_offset, theta=theta)
-            self.players[f"player_{i}"] = Player(id=i, r=r + self.player_offset, theta=theta, spoon_id=i)
+            fr, ftheta = r + self.food_offset, theta
+            fx, fy = polar_to_cartesian(fr, ftheta)
+            self.foods[i] = Food(id=i, x=fx, y=fy)
+            px, py = polar_to_cartesian(r=r + self.player_offset, theta=theta)
+            self.players[f"player_{i}"] = Player(id=i, x=px, y=py, spoon_id=i)
             self.spoons[i] = Spoon(id=i, length=(min_spoon_len + max_spoon_len)/2, theta=0, player_id=i)
             theta += theta_inc
 
@@ -229,6 +232,15 @@ class Environment(object):
             return True
         return False
     
+    def get_spoon_head(self, spoon_id):
+        spoon = self.spoons[spoon_id]
+        sr, stheta = spoon.length, spoon.theta
+        sx, sy = polar_to_cartesian(sr, stheta)
+        player = self.players[f"player_{spoon.player_id}"]
+        psx, psy = player.location
+        sx, sy = sx+psx, sy+psy
+        return sx, sy
+
     def check_feed_range(self, spoon_id):
         """
         checks if spoon can release food into a player's open mouth
@@ -237,15 +249,14 @@ class Environment(object):
         spoon = self.spoons[spoon_id]
         assert spoon.has_food
 
-        sr, stheta = spoon.length, spoon.theta
-        sx, sy = polar_to_cartesian(sr, stheta)
+        # get location of the spoon head
+        sx, sy = self.get_spoon_head(spoon_id)
         
         # get locations of all players with open mouth
         players_open = [self.players[f"player_{i}"] for i in range(self.n_seats) if self.players[f"player_{i}"].mouth_open]
         players_open_locs = []
         for p in players_open:
-            pr, ptheta = p.location
-            px, py = polar_to_cartesian(pr, ptheta)
+            px, py = p.location
             players_open_locs.append((px, py))
 
         players_fed = -1
@@ -277,15 +288,7 @@ class Environment(object):
         """
         checks if spoon can pick up any food
         """
-        spoon = self.spoons[spoon_id]
-        sr, stheta = spoon.length, spoon.theta
-        sx, sy = polar_to_cartesian(sr, stheta)
-
-        player = self.players[f"player_{int(spoon.player_id)}"]
-        pr, ptheta = player.location
-        px, py = polar_to_cartesian(pr, ptheta)
-
-        sx, sy = sx+px, sy+py
+        sx, sy = self.get_spoon_head(spoon_id)
 
         food_picked = -1
         for food_id in self.foods.keys():
@@ -302,7 +305,9 @@ class Environment(object):
         spoon.pick_up(food_id)
 
         food = self.foods[food_id]
-        food.location = (-1, -1) # TODO: this should reflect wherever the spoon head is
+        sx, sy = self.get_spoon_head(spoon_id)
+        food.location = (sx, sy) # food location same as wherever the spoon head is
+        pass
 
     def agent_iter(self):
         while not self.check_terminal():
@@ -327,7 +332,11 @@ class Environment(object):
         # set spoon length and theta
         current_spoon.length, current_spoon.theta = spoon_length, spoon_theta
 
-        # TODO: update food location if the spoon head has food
+        # update food location if the spoon head has food
+        if current_spoon.has_food:
+            current_food = self.foods[current_spoon.food_id]
+            sx, sy = self.get_spoon_head(current_spoon.id)
+            current_food.location = (sx, sy)
 
         # set current player mouth to open or closed
         current_player.mouth_open = open_mouth
