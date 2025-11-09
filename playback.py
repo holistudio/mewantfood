@@ -87,7 +87,7 @@ else:
     FOOD_COLOR = RED
 
 THIN_STROKE = 1
-THICK_STROKE = 4
+THICK_STROKE = 2
 
 # Create the screen
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -118,15 +118,6 @@ while running and frame_counter < total_frames:
     # Draw the table
     pygame.draw.circle(screen, STROKE_COLOR, (screen_width // 2, screen_height // 2), TABLE_RADIUS, THIN_STROKE)
 
-    # Draw food
-    for x, y in food_locations:
-        screen_x = int(screen_width / 2 + x)
-        screen_y = int(screen_height / 2 + y)
-        if PACMAN_MODE:
-            pygame.draw.circle(screen, FOOD_COLOR, (screen_x, screen_y), FOOD_SIZE)
-        else:
-            pygame.draw.rect(screen, FOOD_COLOR, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
-
     # Draw spoons
     for i, (x, y) in enumerate(agent_locations):
         # Agent's center in screen coordinates
@@ -148,6 +139,17 @@ while running and frame_counter < total_frames:
         draw_rotated_ellipse(screen, BG_COLOR, (end_x, end_y), 10, 5, spoon_angle)
         # Draw black outline
         draw_rotated_ellipse(screen, STROKE_COLOR, (end_x, end_y), 10, 5, spoon_angle, THICK_STROKE)
+    
+    # Draw food
+    for x, y in food_locations:
+        screen_x = int(screen_width / 2 + x)
+        screen_y = int(screen_height / 2 + y)
+        if PACMAN_MODE:
+            pygame.draw.circle(screen, FOOD_COLOR, (screen_x, screen_y), FOOD_SIZE)
+        else:
+            pygame.draw.rect(screen, FOOD_COLOR, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
+
+    
 
     # Draw agents
     for x, y in agent_locations:
