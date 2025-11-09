@@ -3,7 +3,7 @@ import sys
 import math
 import json
 
-PACMAN_MODE = False
+PACMAN_MODE = True
 
 info_json = 'info.json'
 playback_json = 'record.json'
@@ -12,6 +12,20 @@ with open(info_json, 'r') as f:
     info = json.load(f)
 with open(playback_json, 'r') as f:
     trajectory = json.load(f)['trajectory']
+
+
+def polar_to_cartesian(r, theta):
+    # assume theta is in degrees
+    theta_rad = theta * math.pi / 180
+    x = r * math.cos(theta_rad)
+    y = r * math.sin(theta_rad)
+    return x, y
+
+def cartesian_to_polar(x, y):
+    # Convert to polar
+    r = math.sqrt(x**2 + y**2)
+    theta = math.degrees(math.atan2(y, x))
+    return r, theta
 
 # Initialize Pygame
 pygame.init()
@@ -29,11 +43,12 @@ else:
     AGENT_SIZE = FOOD_SIZE = 15
 
 agent_locations = [(p[0],p[1]) for p in info['player_locations']]
-mouth_locations = [(a[0]-12,a[1]) for a in agent_locations]
+# mouth_locations = [(a[0]-12,a[1]) for a in agent_locations]
 
 
 agent_forwards = []
-for r, theta in agent_locations:
+for x, y in agent_locations:
+    r, theta = cartesian_to_polar(x, y)
     theta_rad = theta * math.pi / 180
     # unit vector pointing towards the center (0,0) from the agent's location
     unit_vector = (-math.cos(theta_rad), -math.sin(theta_rad))
@@ -41,12 +56,7 @@ for r, theta in agent_locations:
 
 
 
-def polar_to_cartesian(r, theta):
-    # assume theta is in degrees
-    theta_rad = theta * math.pi / 180
-    x = r * math.cos(theta_rad)
-    y = r * math.sin(theta_rad)
-    return x, y
+
 
 def draw_rotated_ellipse(surface, color, rect_center, r1, r2, angle, width=0):
     """Draws a rotated ellipse on a surface."""
@@ -77,7 +87,7 @@ else:
     FOOD_COLOR = RED
 
 THIN_STROKE = 1
-THICK_STROKE = 2
+THICK_STROKE = 4
 
 # Create the screen
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -109,8 +119,7 @@ while running and frame_counter < total_frames:
     pygame.draw.circle(screen, STROKE_COLOR, (screen_width // 2, screen_height // 2), TABLE_RADIUS, THIN_STROKE)
 
     # Draw food
-    for r, theta in food_locations:
-        x, y = polar_to_cartesian(r, theta)
+    for x, y in food_locations:
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
         if PACMAN_MODE:
@@ -119,14 +128,15 @@ while running and frame_counter < total_frames:
             pygame.draw.rect(screen, FOOD_COLOR, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
 
     # Draw spoons
-    for i, (r, theta) in enumerate(agent_locations):
+    for i, (x, y) in enumerate(agent_locations):
         # Agent's center in screen coordinates
-        agent_x_cart, agent_y_cart = polar_to_cartesian(r, theta)
+        agent_x_cart, agent_y_cart = x,y
         start_x = int(screen_width / 2 + agent_x_cart)
         start_y = int(screen_height / 2 + agent_y_cart)
 
         # Calculate the spoon's absolute angle
         # The agent's forward direction angle is theta + 180.
+        r, theta = cartesian_to_polar(x, y)
         spoon_angle = theta + 180 + spoon_thetas[i]
         end_x_cart, end_y_cart = polar_to_cartesian(spoon_lengths[i], spoon_angle)
         end_x = start_x + int(end_x_cart)
@@ -140,20 +150,16 @@ while running and frame_counter < total_frames:
         draw_rotated_ellipse(screen, STROKE_COLOR, (end_x, end_y), 10, 5, spoon_angle, THICK_STROKE)
 
     # Draw agents
-    for r, theta in agent_locations:
-        x, y = polar_to_cartesian(r, theta)
+    for x, y in agent_locations:
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
         pygame.draw.circle(screen, AGENT_COLOR, (screen_x, screen_y), AGENT_SIZE)
-    for i, (r, theta) in enumerate(mouth_locations):
+    for i, (x, y) in enumerate(agent_locations):
         if agent_mouths[i]:
-            x, y = polar_to_cartesian(r, theta)
             screen_x = int(screen_width / 2 + x)
             screen_y = int(screen_height / 2 + y)
 
-            agent_location = agent_locations[i]
-            ar, at = agent_location
-            x1, y1 = polar_to_cartesian(ar, at)
+            x1, y1 = agent_locations[i]
             x1 = int(screen_width / 2 + x1)
             y1 = int(screen_height / 2 + y1)
             
