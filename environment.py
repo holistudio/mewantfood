@@ -9,10 +9,6 @@ def polar_to_cartesian(r, theta):
     theta = theta * math.pi / 180
     return r*math.cos(theta), r*math.sin(theta)
 
-def cartesian_to_polar(x, y):
-    # TODO: w.r.t screen origin
-    pass
-
 def distance(p1, p2):
     p1x, p1y = p1
     p2x, p2y = p2
