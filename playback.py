@@ -97,6 +97,10 @@ pygame.display.set_caption("mewantfood")
 clock = pygame.time.Clock()
 fps = 30
 
+# Font for agent IDs
+font = pygame.font.Font('../Press_Start_2P/PressStart2P-Regular.ttf', 12)
+
+
 # Total frames for 10 seconds
 total_frames = len(trajectory) * fps
 
@@ -144,10 +148,29 @@ while running and frame_counter < total_frames:
     
 
     # Draw agents
-    for x, y in agent_locations:
+    for i, (x, y) in enumerate(agent_locations):
         screen_x = int(screen_width / 2 + x)
         screen_y = int(screen_height / 2 + y)
         pygame.draw.circle(screen, AGENT_COLOR, (screen_x, screen_y), AGENT_SIZE)
+
+        reward = trajectory[idx]['rewards'][f"player_{i}"]
+        reward = f"{reward:.1f}"
+        # Display agent ID
+        if PACMAN_MODE:
+            id_text = font.render(reward, True, WHITE)
+        else:
+            id_text = font.render(reward, True, BLACK)
+        
+        # Position the ID behind the agent
+        forward_x, forward_y = agent_forwards[i]
+        # The direction behind is opposite to the forward vector
+        text_x = screen_x - forward_x * (AGENT_SIZE * 3.5)
+        text_y = screen_y - forward_y * (AGENT_SIZE * 3.5)
+        
+        text_rect = id_text.get_rect(center=(text_x, text_y))
+        screen.blit(id_text, text_rect)
+
+
     for i, (x, y) in enumerate(agent_locations):
         if agent_mouths[i]:
             screen_x = int(screen_width / 2 + x)
