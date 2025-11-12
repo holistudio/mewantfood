@@ -4,7 +4,7 @@ agent-based simulation of the [allegory of the long spoons](https://en.wikipedia
 
 <img src="preview.png">
 
-Black circles represent the agents seated at the table as they try to eat the red square foods with the long spoons. Partially open circles indicate if the agent has decided to open its mouth to receive food.
+Black circles represent the agents seated at the table as they try to eat the red square foods with the long spoons. Partially open circles indicate if the agent has decided to open its mouth to receive food. Numbers next to each agent indicate each agent's hunger level (-0.1 for each timestep unfed, +1 if food ends up in agent's open mouth).
 
 Or in Pacman-style visualization...
 
