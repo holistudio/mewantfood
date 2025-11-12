@@ -1,10 +1,11 @@
 from environment import Environment
-from agent import PlayFoodAgent
+from agent import PlayFoodAgent, GenerousAgent
 env = Environment(r=180, n_seats=4)
 
 agent1 = PlayFoodAgent(env.action_space)
+agent2 = GenerousAgent(env.action_space)
 
-agents = [agent1, None, None, None]
+agents = [agent1, agent2, None, None]
 
 env.reset()
 a_i = 0
