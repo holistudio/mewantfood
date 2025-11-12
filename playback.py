@@ -140,14 +140,6 @@ while running and frame_counter < total_frames:
         # Draw black outline
         draw_rotated_ellipse(screen, STROKE_COLOR, (end_x, end_y), 10, 5, spoon_angle, THICK_STROKE)
     
-    # Draw food
-    for x, y in food_locations:
-        screen_x = int(screen_width / 2 + x)
-        screen_y = int(screen_height / 2 + y)
-        if PACMAN_MODE:
-            pygame.draw.circle(screen, FOOD_COLOR, (screen_x, screen_y), FOOD_SIZE)
-        else:
-            pygame.draw.rect(screen, FOOD_COLOR, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
 
     
 
@@ -179,7 +171,15 @@ while running and frame_counter < total_frames:
             # else:
             #     pygame.draw.circle(screen, BG_COLOR, (screen_x, screen_y), 4)
 
-    
+    # Draw food
+    for x, y in food_locations:
+        screen_x = int(screen_width / 2 + x)
+        screen_y = int(screen_height / 2 + y)
+        if PACMAN_MODE:
+            pygame.draw.circle(screen, FOOD_COLOR, (screen_x, screen_y), FOOD_SIZE)
+        else:
+            pygame.draw.rect(screen, FOOD_COLOR, (screen_x - FOOD_SIZE // 2, screen_y - FOOD_SIZE // 2, FOOD_SIZE, FOOD_SIZE))
+
 
     
 
