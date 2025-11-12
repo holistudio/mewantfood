@@ -107,7 +107,7 @@ class Environment(object):
 
         self.action_space = {
             "spoon_length": (min_spoon_len, max_spoon_len),
-            "spoon_theta": (1, 0 -1),
+            "spoon_theta": (1, 0, -1),
             "open_mouth": (False, True),
             "pick_food": (False, True),
             "drop_food": (False, True) # this is masked from the player unless they have food on their spoon
