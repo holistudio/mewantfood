@@ -108,10 +108,10 @@ while running and frame_counter < total_frames:
             running = False
 
     idx = frame_counter // fps
-    spoon_lengths = trajectory[idx]['spoon_lengths']
-    spoon_thetas = trajectory[idx]['spoon_thetas']
-    food_locations  = trajectory[idx]['food_locations']
-    agent_mouths = trajectory[idx]['player_mouths_open']
+    spoon_lengths = trajectory[idx]['state']['spoon_lengths']
+    spoon_thetas = trajectory[idx]['state']['spoon_thetas']
+    food_locations  = trajectory[idx]['state']['food_locations']
+    agent_mouths = trajectory[idx]['state']['player_mouths_open']
 
     screen.fill(BG_COLOR)
 
