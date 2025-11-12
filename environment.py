@@ -162,7 +162,11 @@ class Environment(object):
         return state_dict
     
     def log_history(self):
-        self.log['trajectory'].append(copy.deepcopy(self.state()))
+        step_dict = {
+            "state": copy.deepcopy(self.state()),
+            "rewards": copy.deepcopy(self.rewards()),
+        }
+        self.log['trajectory'].append(step_dict)
         pass
 
     def save_log(self, filename="record.json"):
