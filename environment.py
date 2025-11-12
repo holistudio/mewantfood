@@ -238,10 +238,15 @@ class Environment(object):
     
     def get_spoon_head(self, spoon_id):
         spoon = self.spoons[spoon_id]
-        sr, stheta = spoon.length, spoon.theta
-        sx, sy = polar_to_cartesian(sr, stheta)
+        
         player = self.players[f"player_{spoon.player_id}"]
         psx, psy = player.location
+        dx, dy = -psx, -psy
+        
+        angle_rad = math.atan2(dy, dx)
+        angle_deg = math.degrees(angle_rad)
+        sr, stheta = spoon.length, spoon.theta
+        sx, sy = polar_to_cartesian(sr, stheta+angle_deg)
         sx, sy = sx+psx, sy+psy
         return sx, sy
 
