@@ -283,7 +283,7 @@ class Environment(object):
     def release_food(self, spoon_id):
         player_id = self.check_feed_range(spoon_id)
         if player_id != -1:
-            player = self.players[player_id]
+            player = self.players[f"player_{player_id}"]
             player.hunger += 1
 
         spoon = self.spoons[spoon_id]
@@ -302,8 +302,7 @@ class Environment(object):
         food_picked = -1
         for food_id in self.foods.keys():
             food = self.foods[food_id]
-            fr, ftheta = food.location
-            fx, fy = polar_to_cartesian(fr, ftheta)
+            fx, fy = food.location
             if distance((sx,sy), (fx,fy)) <= self.feed_dist:
                 food_picked = food_id
                 break
